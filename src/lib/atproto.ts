@@ -3,14 +3,13 @@ import {
   NodeOAuthClient,
   OAuthClientMetadataInput,
 } from '@atproto/oauth-client-node'
-import { PrismaClient } from '@prisma/client'
 
 export function blueskyClientMetadata(): OAuthClientMetadataInput {
   const baseUrl: string = process.env.NEXT_PUBLIC_URL as string
-
+  const enc = encodeURIComponent
   return {
-    client_name: 'Project Name',
-    client_id: `${baseUrl}/client-metadata.json`,
+    client_name: 'Blueskryb',
+    client_id: `http://localhost?redirect_uri=${enc(`${baseUrl}/oauth/callback`)}&scope=${enc('atproto transition:generic')}`,
     client_uri: `${baseUrl}`,
     redirect_uris: [`${baseUrl}/oauth/callback`],
     policy_uri: `${baseUrl}/policy`,
@@ -24,13 +23,11 @@ export function blueskyClientMetadata(): OAuthClientMetadataInput {
   }
 }
 
-const createBlueskyClient = async (
-  prisma: PrismaClient
-): Promise<NodeOAuthClient> =>
+const createBlueskyClient = async (): Promise<NodeOAuthClient> =>
   new NodeOAuthClient({
     clientMetadata: blueskyClientMetadata(),
-    stateStore: new StateStore(prisma),
-    sessionStore: new SessionStore(prisma),
+    stateStore: new StateStore(),
+    sessionStore: new SessionStore(),
   })
 
 export default createBlueskyClient

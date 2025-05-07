@@ -2,11 +2,10 @@
 
 import createBlueskyClient from '@/lib/atproto'
 import getSession from '@/lib/iron'
-import { prisma } from '@/lib/prisma'
 
 export async function signInWithBluesky(handle: string): Promise<string> {
   // Create a Bluesky client
-  const blueskyClient = await createBlueskyClient(prisma)
+  const blueskyClient = await createBlueskyClient()
 
   // Get the URL to authorize the user
   const url: URL = await blueskyClient.authorize(handle)

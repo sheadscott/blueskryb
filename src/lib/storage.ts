@@ -4,90 +4,62 @@ import type {
   NodeSavedState,
   NodeSavedStateStore,
 } from '@atproto/oauth-client-node'
-import { PrismaClient } from '@prisma/client'
+import { eq } from 'drizzle-orm'
+import { db } from './db'
+import { authSession, authState } from './schema'
 
 export class StateStore implements NodeSavedStateStore {
-  constructor(private prisma: PrismaClient) {}
-
   async get(key: string): Promise<NodeSavedState | undefined> {
-    const authState = await this.prisma.authState.findFirst({
-      where: {
-        key,
-      },
-    })
-
-    if (!authState) {
-      return
-    }
-
-    return JSON.parse(authState.state) as NodeSavedState
+    const result = await db
+      .select()
+      .from(authState)
+      .where(eq(authState.key, key))
+    if (!result[0]) return
+    return JSON.parse(result[0].state) as NodeSavedState
   }
 
   async set(key: string, val: NodeSavedState) {
     const state = JSON.stringify(val)
-
-    await this.prisma.authState.upsert({
-      where: {
-        key,
-      },
-      update: {
-        state,
-      },
-      create: {
-        key,
-        state,
-      },
-    })
+    // Upsert: try update, if not updated, insert
+    const updated = await db
+      .update(authState)
+      .set({ state })
+      .where(eq(authState.key, key))
+      .returning()
+    if (updated.length === 0) {
+      await db.insert(authState).values({ key, state })
+    }
   }
 
   async del(key: string) {
-    await this.prisma.authState.delete({
-      where: {
-        key,
-      },
-    })
+    await db.delete(authState).where(eq(authState.key, key))
   }
 }
 
 export class SessionStore implements NodeSavedSessionStore {
-  constructor(private prisma: PrismaClient) {}
-
   async get(key: string): Promise<NodeSavedSession | undefined> {
-    const authSession = await this.prisma.authSession.findFirst({
-      where: {
-        key,
-      },
-    })
-
-    if (!authSession) {
-      return
-    }
-
-    return JSON.parse(authSession.session) as NodeSavedSession
+    const result = await db
+      .select()
+      .from(authSession)
+      .where(eq(authSession.key, key))
+    if (!result[0]) return
+    return JSON.parse(result[0].session) as NodeSavedSession
   }
 
   async set(key: string, val: NodeSavedSession) {
     const session = JSON.stringify(val)
-
-    await this.prisma.authSession.upsert({
-      where: {
-        key,
-      },
-      update: {
-        session,
-      },
-      create: {
-        key,
-        session,
-      },
-    })
+    // Upsert: try update, if not updated, insert
+    const updated = await db
+      .update(authSession)
+      .set({ session })
+      .where(eq(authSession.key, key))
+      .returning()
+    if (updated.length === 0) {
+      await db.insert(authSession).values({ key, session })
+    }
   }
 
   async del(key: string) {
-    await this.prisma.authSession.delete({
-      where: {
-        key,
-      },
-    })
+    await db.delete(authSession).where(eq(authSession.key, key))
   }
 }

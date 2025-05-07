@@ -1,7 +1,6 @@
 import { createUser } from '@/functions/create-user'
 import createBlueskyClient from '@/lib/atproto'
 import getSession from '@/lib/iron'
-import { prisma } from '@/lib/prisma'
 import { Agent } from '@atproto/api'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -11,7 +10,7 @@ export async function GET(request: NextRequest) {
 
   try {
     // Create a Bluesky client
-    const blueskyClient = await createBlueskyClient(prisma)
+    const blueskyClient = await createBlueskyClient()
 
     // Get the session and state from the callback
     const { session } = await blueskyClient.callback(nextUrl.searchParams)
