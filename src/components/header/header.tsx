@@ -1,3 +1,5 @@
+import BlueskyLogo from '@/components/bluesky-logo'
+import LogoutButton from '@/components/logout-button'
 import Image from 'next/image'
 import Link from 'next/link'
 import AvatarUI from './avatar'
@@ -18,14 +20,19 @@ export default function Header({ user }: { user: any }) {
         </Link>
         <div className="py-6">
           {user ? (
-            <AvatarUI user={user} />
+            <div className="flex items-center gap-2">
+              <AvatarUI user={user} />
+              <LogoutButton />
+            </div>
           ) : (
-            <a
-              href="#"
-              className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+            <Link
+              className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
+              href={`/login`}
+              rel="noopener noreferrer"
             >
-              Log in
-            </a>
+              <BlueskyLogo className="size-6 dark:invert fill-background" />
+              Login with Bluesky
+            </Link>
           )}
         </div>
       </div>

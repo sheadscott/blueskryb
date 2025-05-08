@@ -5,8 +5,8 @@ import type {
   NodeSavedStateStore,
 } from '@atproto/oauth-client-node'
 import { eq } from 'drizzle-orm'
-import { db } from './db'
-import { authSession, authState } from './schema'
+import { db } from './db/db'
+import { authSession, authState } from './db/schema'
 
 export class StateStore implements NodeSavedStateStore {
   async get(key: string): Promise<NodeSavedState | undefined> {

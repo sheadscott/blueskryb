@@ -13,6 +13,8 @@ alwaysApply: true
   React v19
   Node v22
   Typescript v5
+  Drizzle
+  Supabase
   
   Code Style and Structure
   - Write concise, technical TypeScript code with accurate examples.

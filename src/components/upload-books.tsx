@@ -6,6 +6,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import { ButtonLoading } from '@/components/ui/button-loading'
 import {
   Card,
   CardContent,
@@ -15,15 +16,42 @@ import {
 } from '@/components/ui/card'
 import { useState } from 'react'
 
-export default function Component() {
-  const [file, setFile] = useState(null)
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0])
+export default function UploadBooks({ userId }: { userId: number }) {
+  const [file, setFile] = useState<File | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.files && e.target.files[0]) setFile(e.target.files[0])
   }
-  const handleSubmit = (e) => {
+
+  function handleDrop(e: React.DragEvent<HTMLLabelElement>) {
     e.preventDefault()
-    console.log('Uploading file:', file)
+    if (e.dataTransfer.files && e.dataTransfer.files[0])
+      setFile(e.dataTransfer.files[0])
   }
+
+  function handleDragOver(e: React.DragEvent<HTMLLabelElement>) {
+    e.preventDefault()
+  }
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    if (!file) return
+    setIsLoading(true)
+    try {
+      const res = await fetch('/api/trigger-example', { method: 'POST' })
+      if (!res.ok) {
+        const error = await res.json().catch(() => ({}))
+        throw new Error(error?.error || 'Unknown error')
+      }
+      const data = await res.json()
+      setIsLoading(false)
+      console.log('Trigger response:', data)
+    } catch (err) {
+      console.error('Trigger error:', err)
+    }
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -33,10 +61,16 @@ export default function Component() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="grid gap-4">
+        <form
+          onSubmit={handleSubmit}
+          className="grid gap-4"
+          encType="multipart/form-data"
+        >
           <div className="flex items-center justify-center w-full">
             <label
               htmlFor="dropzone-file"
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
               className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
             >
               <div className="flex flex-col items-center justify-center pt-5 pb-6">
@@ -55,6 +89,7 @@ export default function Component() {
                 className="hidden"
                 onChange={handleFileChange}
               />
+              <input type="hidden" name="userId" value={userId} />
             </label>
           </div>
           {file && (
@@ -65,7 +100,11 @@ export default function Component() {
                   {(file.size / 1024).toFixed(2)} KB
                 </p>
               </div>
-              <Button type="submit">Upload</Button>
+              {isLoading ? (
+                <ButtonLoading />
+              ) : (
+                <Button type="submit">Upload</Button>
+              )}
             </div>
           )}
         </form>

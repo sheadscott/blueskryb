@@ -11,7 +11,7 @@ export default function LoginButton() {
   const handleClick = async (event: FormEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    router.push(`/oauth/login`)
+    router.push(`/login`)
   }
 
   return (

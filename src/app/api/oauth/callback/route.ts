@@ -1,4 +1,4 @@
-import { createUser } from '@/functions/create-user'
+import { findOrCreateUser } from '@/functions/create-user'
 import createBlueskyClient from '@/lib/atproto'
 import getSession from '@/lib/iron'
 import { Agent } from '@atproto/api'
@@ -23,27 +23,24 @@ export async function GET(request: NextRequest) {
       actor: session.did,
     })
 
-    // Create a user from the Bluesky profile
+    // Find or create user in the database
+    const dbUser = await findOrCreateUser(data)
     const ironSession = await getSession()
-
-    // Save the user to the session
-    ironSession.user = createUser(data)
-
-    // Save the session
+    ironSession.user = dbUser
     await ironSession.save()
 
     // Redirect to the private page
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_URL}/private`)
+    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_URL}`)
   } catch (e: unknown) {
     if (e instanceof Error) {
       // Bluesky error
       return NextResponse.redirect(
-        `${process.env.NEXT_PUBLIC_URL}/oauth/login?error=${e.message}`
+        `${process.env.NEXT_PUBLIC_URL}/login?error=${e.message}`
       )
     } else {
       // Unknown error
       return NextResponse.redirect(
-        `${process.env.NEXT_PUBLIC_URL}/oauth/login?error=Unknown error`
+        `${process.env.NEXT_PUBLIC_URL}/login?error=Unknown error`
       )
     }
   }

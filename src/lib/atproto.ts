@@ -9,9 +9,9 @@ export function blueskyClientMetadata(): OAuthClientMetadataInput {
   const enc = encodeURIComponent
   return {
     client_name: 'Blueskryb',
-    client_id: `http://localhost?redirect_uri=${enc(`${baseUrl}/oauth/callback`)}&scope=${enc('atproto transition:generic')}`,
+    client_id: `http://localhost?redirect_uri=${enc(`${baseUrl}/api/oauth/callback`)}&scope=${enc('atproto transition:generic')}`,
     client_uri: `${baseUrl}`,
-    redirect_uris: [`${baseUrl}/oauth/callback`],
+    redirect_uris: [`${baseUrl}/api/oauth/callback`],
     policy_uri: `${baseUrl}/policy`,
     tos_uri: `${baseUrl}/tos`,
     scope: 'atproto transition:generic',
