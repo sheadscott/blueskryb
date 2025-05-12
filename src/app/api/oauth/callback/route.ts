@@ -30,17 +30,17 @@ export async function GET(request: NextRequest) {
     await ironSession.save()
 
     // Redirect to the private page
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_URL}`)
+    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_VERCEL_URL}`)
   } catch (e: unknown) {
     if (e instanceof Error) {
       // Bluesky error
       return NextResponse.redirect(
-        `${process.env.NEXT_PUBLIC_URL}/login?error=${e.message}`
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/login?error=${e.message}`
       )
     } else {
       // Unknown error
       return NextResponse.redirect(
-        `${process.env.NEXT_PUBLIC_URL}/login?error=Unknown error`
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/login?error=Unknown error`
       )
     }
   }

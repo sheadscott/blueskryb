@@ -5,7 +5,7 @@ import {
 } from '@atproto/oauth-client-node'
 
 export function blueskyClientMetadata(): OAuthClientMetadataInput {
-  const url: string = process.env.NEXT_PUBLIC_URL as string
+  const url: string = process.env.NEXT_PUBLIC_VERCEL_URL as string
   const isLocalhost = url.includes('localhost')
   const baseUrl: string = isLocalhost ? `http://127.0.0.1:3000` : url
   const enc = encodeURIComponent
@@ -14,7 +14,7 @@ export function blueskyClientMetadata(): OAuthClientMetadataInput {
     // client_id: `${baseUrl}/client-metadata.json`,
     client_id: isLocalhost
       ? `http://localhost?redirect_uri=${enc(`${baseUrl}/api/oauth/callback`)}&scope=${enc('atproto transition:generic')}`
-      : `${baseUrl}`,
+      : `${baseUrl}/client-metadata.json`,
     client_uri: `${baseUrl}`,
     redirect_uris: [`${baseUrl}/api/oauth/callback`],
     policy_uri: `${baseUrl}/policy`,
