@@ -38,8 +38,7 @@ next-env.d.ts
 # jetbrains
 .idea
 
-supabase
-
+# trigger
 .trigger
 
 /scratch
