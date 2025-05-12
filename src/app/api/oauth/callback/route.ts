@@ -9,6 +9,7 @@ export const runtime = 'nodejs'
 export async function GET(request: NextRequest) {
   // Get the next URL from the request
   const nextUrl = request.nextUrl
+  const url = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
 
   try {
     // Create a Bluesky client
@@ -32,18 +33,14 @@ export async function GET(request: NextRequest) {
     await ironSession.save()
 
     // Redirect to the private page
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_VERCEL_URL}`)
+    return NextResponse.redirect(`${url}`)
   } catch (e: unknown) {
     if (e instanceof Error) {
       // Bluesky error
-      return NextResponse.redirect(
-        `${process.env.NEXT_PUBLIC_VERCEL_URL}/login?error=${e.message}`
-      )
+      return NextResponse.redirect(`${url}/login?error=${e.message}`)
     } else {
       // Unknown error
-      return NextResponse.redirect(
-        `${process.env.NEXT_PUBLIC_VERCEL_URL}/login?error=Unknown error`
-      )
+      return NextResponse.redirect(`${url}/login?error=Unknown error`)
     }
   }
 }
