@@ -1,10 +1,11 @@
 import BlueskyLogo from '@/components/bluesky-logo'
 import LogoutButton from '@/components/logout-button'
+import { User } from '@/types/user'
 import Image from 'next/image'
 import Link from 'next/link'
 import AvatarUI from './avatar'
 
-export default function Header({ user }: { user: any }) {
+export default function Header({ user }: { user: User }) {
   return (
     <header className="bg-white">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
