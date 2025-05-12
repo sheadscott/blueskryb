@@ -38,8 +38,16 @@ export default function UploadBooks({ userId }: { userId: number }) {
     e.preventDefault()
     if (!file) return
     setIsLoading(true)
+
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('userId', userId.toString())
+
     try {
-      const res = await fetch('/api/trigger-example', { method: 'POST' })
+      const res = await fetch('/api/books/goodreads', {
+        method: 'POST',
+        body: formData,
+      })
       if (!res.ok) {
         const error = await res.json().catch(() => ({}))
         throw new Error(error?.error || 'Unknown error')

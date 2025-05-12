@@ -1,5 +1,5 @@
-import { findOrCreateUser } from '@/functions/create-user'
 import createBlueskyClient from '@/lib/atproto'
+import { findOrCreateUser } from '@/lib/db/create-user'
 import getSession from '@/lib/iron'
 import { Agent } from '@atproto/api'
 import { NextRequest, NextResponse } from 'next/server'
