@@ -4,7 +4,7 @@ import { User } from '@/types/user'
 export default function AvatarUI({ user }: { user: User }) {
   return (
     <Avatar>
-      <AvatarImage src={user.avatar} alt={user.name} />
+      <AvatarImage src={user.avatar ?? undefined} alt={user.name} />
       <AvatarFallback>CN</AvatarFallback>
     </Avatar>
   )

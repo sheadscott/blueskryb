@@ -1,9 +1,8 @@
-import './globals.css'
-
 import Header from '@/components/header/header'
 import getSession from '@/lib/iron'
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
+import './globals.css'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',

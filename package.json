@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack",
     "trigger:dev": "npx trigger.dev@latest dev",
     "dev-concurrent": "npx concurrently --kill-others --names \"next,trigger\" --prefix-colors \"yellow,blue\" \"next dev --turbopack\" \"npm run trigger:dev\"",
-    "build": "npm run drizzle:generate && npm run drizzle:migrate && next build",
+    "build": "npm run drizzle:dev && next build",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write .",

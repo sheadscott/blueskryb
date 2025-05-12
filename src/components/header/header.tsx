@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import AvatarUI from './avatar'
 
-export default function Header({ user }: { user: User }) {
+export default function Header({ user }: { user: User | null }) {
   return (
     <header className="bg-white">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
