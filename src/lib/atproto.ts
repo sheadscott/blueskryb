@@ -6,8 +6,10 @@ import {
 
 export function blueskyClientMetadata(): OAuthClientMetadataInput {
   const url: string = process.env.NEXT_PUBLIC_VERCEL_URL as string
-  const isLocalhost = url.includes('localhost')
-  const baseUrl: string = isLocalhost ? `http://127.0.0.1:3000` : url
+  const isLocalhost = url.includes('127.0.0.1')
+  const baseUrl: string = isLocalhost
+    ? `http://127.0.0.1:3000`
+    : `https://${url}`
   const enc = encodeURIComponent
   return {
     client_name: 'Blueskryb',

@@ -4,6 +4,8 @@ import getSession from '@/lib/iron'
 import { Agent } from '@atproto/api'
 import { NextRequest, NextResponse } from 'next/server'
 
+export const runtime = 'nodejs'
+
 export async function GET(request: NextRequest) {
   // Get the next URL from the request
   const nextUrl = request.nextUrl

@@ -10,6 +10,13 @@ export type Session = {
 }
 
 const getSession = async (): Promise<IronSession<Session>> => {
+  const password = process.env.COOKIE_PASSWORD
+  if (!password || password.length < 32) {
+    throw new Error(
+      'COOKIE_PASSWORD env var must be set and at least 32 characters long'
+    )
+  }
+
   return await getIronSession<Session>((await cookies()) as ResponseCookies, {
     cookieName: 'sid',
     password: process.env.COOKIE_PASSWORD as string,
