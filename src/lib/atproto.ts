@@ -14,7 +14,7 @@ export function blueskyClientMetadata(): OAuthClientMetadataInput {
     // client_id: `${baseUrl}/client-metadata.json`,
     client_id: isLocalhost
       ? `http://localhost?redirect_uri=${enc(`${baseUrl}/api/oauth/callback`)}&scope=${enc('atproto transition:generic')}`
-      : `${baseUrl}/client-metadata.json`,
+      : `${baseUrl}`,
     client_uri: `${baseUrl}`,
     redirect_uris: [`${baseUrl}/api/oauth/callback`],
     policy_uri: `${baseUrl}/policy`,
