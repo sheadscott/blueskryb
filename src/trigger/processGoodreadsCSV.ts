@@ -10,6 +10,8 @@ import { drizzle } from 'drizzle-orm/node-postgres'
 import Papa from 'papaparse'
 
 // Initialize Drizzle client
+// Log the env var
+logger.log('POSTGRES_URL', { POSTGRES_URL: process.env.POSTGRES_URL })
 const db = drizzle(process.env.POSTGRES_URL!)
 
 function dedupeBooks(books: CleanedGoodreadsBook[]): CleanedGoodreadsBook[] {
