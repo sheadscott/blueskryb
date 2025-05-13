@@ -15,6 +15,13 @@
       "when": 1747060881852,
       "tag": "0001_careful_praxagora",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1747155789168,
+      "tag": "0002_dusty_falcon",
+      "breakpoints": true
     }
   ]
 }

@@ -15,10 +15,18 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { useState } from 'react'
+import { UploadProgress } from './upload-progress'
+
+// Define the correct type for runData
+interface RunData {
+  id: string
+  publicAccessToken: string
+}
 
 export default function UploadBooks({ userId }: { userId: number }) {
   const [file, setFile] = useState<File | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [runData, setRunData] = useState<RunData | null>(null)
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files[0]) setFile(e.target.files[0])
@@ -55,6 +63,8 @@ export default function UploadBooks({ userId }: { userId: number }) {
       const data = await res.json()
       setIsLoading(false)
       console.log('Trigger response:', data)
+      console.log('Run data:', data.id, data.publicAccessToken)
+      setRunData(data)
     } catch (err) {
       console.error('Trigger error:', err)
     }
@@ -116,6 +126,12 @@ export default function UploadBooks({ userId }: { userId: number }) {
             </div>
           )}
         </form>
+        {runData && (
+          <UploadProgress
+            runId={runData.id}
+            publicAccessToken={runData.publicAccessToken}
+          />
+        )}
       </CardContent>
     </Card>
   )

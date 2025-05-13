@@ -9,7 +9,10 @@ export const runtime = 'nodejs'
 export async function GET(request: NextRequest) {
   // Get the next URL from the request
   const nextUrl = request.nextUrl
-  const url = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+  const isLocalhost = process.env.NEXT_PUBLIC_VERCEL_URL?.includes('127.0.0.1')
+  const url = isLocalhost
+    ? process.env.NEXT_PUBLIC_VERCEL_URL
+    : `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
 
   try {
     // Create a Bluesky client

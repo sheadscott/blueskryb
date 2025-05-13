@@ -22,7 +22,9 @@ export default function Header({ user }: { user: User | null }) {
         <div className="py-6">
           {user ? (
             <div className="flex items-center gap-2">
-              <AvatarUI user={user} />
+              <Link href={`/${user.handle}`}>
+                <AvatarUI user={user} />
+              </Link>
               <LogoutButton />
             </div>
           ) : (

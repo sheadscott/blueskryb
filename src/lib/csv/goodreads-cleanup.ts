@@ -33,6 +33,7 @@ export interface CleanedGoodreadsBook {
   additionalAuthors: string | null
   isbn: string | null
   isbn13: string | null
+  bookshopIsbn13: string | null // This is optional because it's not always available
   userRating: number
   publisher: string | null
   binding: string | null
@@ -73,6 +74,7 @@ export function cleanGoodreadsCsvRow(
       additionalAuthors: data['Additional Authors'] || null,
       isbn: cleanedIsbn,
       isbn13: cleanedIsbn13,
+      bookshopIsbn13: null,
       userRating: data['My Rating']
         ? parseInt(String(data['My Rating']), 10)
         : 0,

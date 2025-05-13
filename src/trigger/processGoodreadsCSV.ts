@@ -4,7 +4,7 @@ import {
   GoodreadsCsvRow,
 } from '@/lib/csv/goodreads-cleanup'
 import { book as bookTable, userBook as userBookTable } from '@/lib/db/schema'
-import { logger, task, wait } from '@trigger.dev/sdk/v3'
+import { logger, task } from '@trigger.dev/sdk/v3'
 import { eq, or } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/node-postgres'
 import Papa from 'papaparse'
@@ -31,7 +31,7 @@ function dedupeBooks(books: CleanedGoodreadsBook[]): CleanedGoodreadsBook[] {
 
 export const processGoodreadsCSV = task({
   id: 'process-goodreads-csv',
-  maxDuration: 10,
+  maxDuration: 3600,
   run: async (payload: { content: string; userId: number }) => {
     logger.log('Processing Goodreads CSV', { userId: payload.userId })
     const results: CleanedGoodreadsBook[] = []
@@ -86,7 +86,7 @@ export const processGoodreadsCSV = task({
     // Get just the status code and log it.
     // Wait 2 seconds and repeat for each book.
     // If the book doesn't have an isbn13, skip it.
-    for (const [i, b] of newBooks.entries()) {
+    for (const b of newBooks) {
       if (!b.isbn13) {
         logger.log(`Skipping book without isbn13: ${b.title}`)
         continue
@@ -97,13 +97,17 @@ export const processGoodreadsCSV = task({
         logger.log(
           `Bookshop.org status for ${b.title} (${b.isbn13}): ${res.status}`
         )
+        // If the status code is 200, write the isbn13 to a bookshopIsbn13 key so that we can write it to the database below
+        if (res.status === 200) {
+          b.bookshopIsbn13 = b.isbn13
+        }
       } catch (err) {
         logger.error(
           `Error fetching Bookshop.org for ${b.title} (${b.isbn13}):`,
           { error: err }
         )
       }
-      if (i < newBooks.length - 1) await wait.for({ seconds: 2 })
+      // if (i < newBooks.length - 1) await wait.for({ seconds: 2 })
     }
 
     let insertedBooks = []
@@ -120,6 +124,7 @@ export const processGoodreadsCSV = task({
               addAuthors: b.additionalAuthors,
               isbn: b.isbn,
               isbn13: b.isbn13,
+              bookshopIsbn13: b.bookshopIsbn13,
               publisher: b.publisher,
               binding: b.binding,
               numOfPages: b.numberOfPages,

@@ -1,9 +1,9 @@
-import UploadBooks from '@/components/upload-books'
+import UploadBooks from '@/components/upload-csv/upload-books'
 import getSession from '@/lib/iron'
 
 export default async function Home() {
   const session = await getSession()
-  console.log('Session: ', session)
+  // console.log('Session: ', session)
   return (
     <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
       <h1 className="font-black text-5xl uppercase">Welcome to Blueskryb</h1>

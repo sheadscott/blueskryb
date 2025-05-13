@@ -31,7 +31,8 @@ export const user = pgTable('user', {
   id: serial('id').primaryKey(),
   did: text('did').notNull(),
   email: text('email'),
-  name: text('name'),
+  name: text('name').notNull(),
+  handle: text('handle').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),
@@ -45,6 +46,7 @@ export const book = pgTable('book', {
   grBookId: text('gr_book_id').unique(),
   isbn: text('isbn').unique(),
   isbn13: text('isbn13').unique(),
+  bookshopIsbn13: text('booshop_isbn13'),
   title: text('title').notNull(),
   author: text('author').notNull(),
   authorLf: text('author_lf'),
@@ -65,8 +67,6 @@ export const book = pgTable('book', {
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .notNull()
     .defaultNow(),
-
-  bookshopIsbnId: integer('bookshop_isbn_id').references(() => bookshopISBN.id),
 })
 
 export const userBook = pgTable(
@@ -100,22 +100,4 @@ export const userBook = pgTable(
   //   pk: [table.userId, table.bookId],
   // })
   (table) => [primaryKey({ columns: [table.userId, table.bookId] })]
-)
-
-export const bookshopISBN = pgTable('bookshopISBN', {
-  id: serial('id').primaryKey(),
-  isbn13: text('isbn13').notNull().unique(),
-})
-
-export const bookshopISBNBook = pgTable(
-  'bookshopISBNBook',
-  {
-    bookshopISBNId: integer('bookshop_isbn_id')
-      .notNull()
-      .references(() => bookshopISBN.id, { onDelete: 'cascade' }),
-    bookId: integer('book_id')
-      .notNull()
-      .references(() => book.id, { onDelete: 'cascade' }),
-  },
-  (table) => [primaryKey({ columns: [table.bookshopISBNId, table.bookId] })]
 )

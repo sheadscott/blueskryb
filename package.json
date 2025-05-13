@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "trigger:dev": "npx trigger.dev@latest dev",
+    "trigger:prod": "npx trigger.dev@latest deploy",
     "dev-concurrent": "npx concurrently --kill-others --names \"next,trigger\" --prefix-colors \"yellow,blue\" \"next dev --turbopack\" \"npm run trigger:dev\"",
     "build": "npm run drizzle:dev && next build",
     "start": "next start",
@@ -20,6 +21,7 @@
     "@atproto/oauth-client-node": "^0.1.2",
     "@radix-ui/react-avatar": "^1.1.9",
     "@radix-ui/react-slot": "^1.2.2",
+    "@trigger.dev/react-hooks": "^3.3.17",
     "@trigger.dev/sdk": "^3.3.17",
     "@vercel/og": "^0.6.8",
     "cheerio": "^1.0.0",

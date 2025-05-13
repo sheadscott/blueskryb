@@ -6,7 +6,7 @@ export function ButtonLoading() {
   return (
     <Button disabled>
       <Loader2 className="animate-spin" />
-      Please wait
+      Uploading File...
     </Button>
   )
 }

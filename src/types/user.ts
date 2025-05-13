@@ -1,4 +1,7 @@
 export interface User {
-  avatar: string | null
+  id: number
+  did: string
+  handle: string
   name: string
+  avatar: string | null
 }
