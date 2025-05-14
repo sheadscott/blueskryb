@@ -1,5 +1,5 @@
 interface HandlePageProps {
-  params: { handle: string }
+  params: Promise<{ handle: string }>
 }
 
 export default async function HandlePage({ params }: HandlePageProps) {

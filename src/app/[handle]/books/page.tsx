@@ -1,12 +1,12 @@
 import { getUserWithBooks } from '@/lib/db/books/get-all-user-books'
 import { notFound } from 'next/navigation'
 
-interface HandlePageProps {
-  params: { handle: string }
-}
-
-export default async function HandlePage({ params }: HandlePageProps) {
-  const { handle } = params
+export default async function HandlePage({
+  params,
+}: {
+  params: Promise<{ handle: string }>
+}) {
+  const { handle } = await params
   console.log('handle', handle)
   console.log('About to call getUserWithBooks', handle)
   const userWithBooks = await getUserWithBooks(handle)
