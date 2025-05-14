@@ -1,5 +1,7 @@
 'use client'
 
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { signInWithBluesky } from '@/lib/actions'
 import { useRouter } from 'next/navigation'
 import { FormEvent, useEffect, useState } from 'react'
@@ -7,9 +9,8 @@ import { FormEvent, useEffect, useState } from 'react'
 // This is the login page
 export default function Page() {
   const router = useRouter()
-
-  // This is a controlled input
   const [handle, setHandle] = useState('')
+  const [error, setError] = useState<string | null>(null)
 
   // Remove the @ symbol from the handle
   useEffect(() => {
@@ -19,20 +20,32 @@ export default function Page() {
   // Handle the form submission
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    setError(null)
 
     if (!handle) {
       return
     }
 
-    // Sign in with Bluesky
-    const url: string = await signInWithBluesky(handle)
-
-    // Redirect to the Bluesky login page
-    router.push(url)
+    try {
+      const url: string = await signInWithBluesky(handle)
+      router.push(url)
+    } catch (err) {
+      if (
+        err instanceof Error &&
+        err.message.includes('Failed to resolve identity')
+      ) {
+        setError(
+          'No Bluesky user was found that matches that handle. Please check the spelling and try again.'
+        )
+      } else {
+        setError('Failed to sign in. Please try again later.')
+      }
+    }
   }
 
   return (
     <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+      {error && <div className="text-red-600 mb-4">{error}</div>}
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
           <label
@@ -42,23 +55,17 @@ export default function Page() {
             Bluesky Handle
           </label>
           <div className="mt-2">
-            <input
+            <Input
               id="handle"
               name="handle"
               type="text"
               placeholder="handle.bsky.social"
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
               value={handle}
               onChange={(event) => setHandle(event.target.value)}
             />
           </div>
         </div>
-        <button
-          type="submit"
-          className="rounded-md bg-blue-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-        >
-          Sign in with Bluesky
-        </button>
+        <Button type="submit">Sign in with Bluesky</Button>
       </form>
     </main>
   )

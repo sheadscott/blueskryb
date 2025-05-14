@@ -15,6 +15,7 @@ alwaysApply: true
   Typescript v5
   Drizzle
   Supabase
+  Trigger.dev
   
   Code Style and Structure
   - Write concise, technical TypeScript code with accurate examples.
