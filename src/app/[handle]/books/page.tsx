@@ -7,21 +7,19 @@ export default async function HandlePage({
   params: Promise<{ handle: string }>
 }) {
   const { handle } = await params
-  console.log('handle', handle)
-  console.log('About to call getUserWithBooks', handle)
   const userWithBooks = await getUserWithBooks(handle)
   if (!userWithBooks) return notFound()
 
   return (
-    <main>
-      <h1>{handle} Books</h1>
-      <ul>
+    <>
+      <h1 className="font-bold text-lg pb-4">{handle} Books</h1>
+      <ul className="space-y-2">
         {userWithBooks.books.map((book) => (
           <li key={book.title + book.author}>
             <strong>{book.title}</strong> by {book.author}
           </li>
         ))}
       </ul>
-    </main>
+    </>
   )
 }

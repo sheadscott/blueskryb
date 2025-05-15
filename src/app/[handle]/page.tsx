@@ -9,10 +9,5 @@ export default async function HandlePage({ params }: HandlePageProps) {
   // Example: const user = await getUserByHandle(handle)
   // if (!user) return notFound()
 
-  return (
-    <main>
-      <h1>Profile for {handle}</h1>
-      {/* Render user info here */}
-    </main>
-  )
+  return <h1>Profile for {handle}</h1>
 }

@@ -30,6 +30,7 @@ export default function Page() {
       const url: string = await signInWithBluesky(handle)
       router.push(url)
     } catch (err) {
+      console.error('My Error: ', err)
       if (
         err instanceof Error &&
         err.message.includes('Failed to resolve identity')
@@ -38,7 +39,7 @@ export default function Page() {
           'No Bluesky user was found that matches that handle. Please check the spelling and try again.'
         )
       } else {
-        setError('Failed to sign in. Please try again later.')
+        setError(err instanceof Error ? err.message : 'Failed to sign in.')
       }
     }
   }

@@ -15,35 +15,47 @@ export type User = {
 export async function findOrCreateUser(
   data: AppBskyActorDefs.ProfileViewDetailed
 ): Promise<User> {
-  // Check if user exists
+  // Check if user exists by handle
   const existing = await db
     .select()
     .from(userTable)
-    .where(eq(userTable.did, data.did))
+    .where(eq(userTable.handle, data.handle))
     .limit(1)
 
   const newName = data.displayName || data.handle
   const newHandle = data.handle
+  const newDid = data.did
 
   if (existing.length > 0) {
     const user = existing[0]
-    // Check if any field is different
-    if (user.name !== newName || user.handle !== newHandle) {
-      // Update changed fields
+    // If user has a did, treat as returning user
+    if (user.did) {
+      if (user.name !== newName) {
+        await db
+          .update(userTable)
+          .set({ name: newName })
+          .where(eq(userTable.id, user.id))
+      }
+      return {
+        id: user.id,
+        did: user.did ?? '',
+        handle: user.handle,
+        name: newName ?? '',
+        avatar: data.avatar ?? null,
+      }
+    } else {
+      // User has handle but no did, update did and name
       await db
         .update(userTable)
-        .set({
-          name: newName,
-          handle: newHandle,
-        })
-        .where(eq(userTable.did, data.did))
-    }
-    return {
-      id: user.id,
-      did: user.did,
-      handle: newHandle,
-      name: newName,
-      avatar: data.avatar ?? null,
+        .set({ did: newDid, name: newName })
+        .where(eq(userTable.id, user.id))
+      return {
+        id: user.id,
+        did: newDid ?? '',
+        handle: user.handle,
+        name: newName ?? '',
+        avatar: data.avatar ?? null,
+      }
     }
   }
 
@@ -51,17 +63,17 @@ export async function findOrCreateUser(
   const [created] = await db
     .insert(userTable)
     .values({
-      did: data.did,
+      did: newDid,
       name: newName,
-      email: undefined, // Bluesky does not provide email
       handle: newHandle,
+      email: '', // required by schema, set to empty string or provide real value
     })
     .returning()
   return {
     id: created.id,
-    did: created.did,
+    did: created.did ?? '',
     handle: created.handle,
-    name: created.name,
+    name: created.name ?? '',
     avatar: data.avatar ?? null,
   }
 }

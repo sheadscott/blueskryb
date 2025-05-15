@@ -40,10 +40,10 @@ export async function GET(request: NextRequest) {
   } catch (e: unknown) {
     if (e instanceof Error) {
       // Bluesky error
-      return NextResponse.redirect(`${url}/login?error=${e.message}`)
+      return NextResponse.redirect(`${url}/?error=${e.message}`)
     } else {
       // Unknown error
-      return NextResponse.redirect(`${url}/login?error=Unknown error`)
+      return NextResponse.redirect(`${url}/?error=Unknown error`)
     }
   }
 }

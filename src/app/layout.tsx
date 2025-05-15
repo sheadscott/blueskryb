@@ -32,9 +32,10 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header user={session.user} />
-        <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-(family-name:--font-geist-sans)">
-          {children}
+        <div className="container mx-auto sm:px-6 lg:px-8">
+          <Header user={session.user} />
+          {/* <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-(family-name:--font-geist-sans)"> */}
+          <main className="max-w-xl mx-auto mt-8">{children}</main>
         </div>
       </body>
     </html>

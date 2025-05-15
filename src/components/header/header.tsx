@@ -1,41 +1,24 @@
-import BlueskyLogo from '@/components/bluesky-logo'
-import LogoutButton from '@/components/logout-button'
+import LoginButton from '@/components/auth/login-button'
 import { User } from '@/types/user'
-import Image from 'next/image'
 import Link from 'next/link'
-import AvatarUI from './avatar'
+import BlueskrybLogotype from './blueskryb-logotype'
+import ProfileDropdown from './profile-dropdown'
 
 export default function Header({ user }: { user: User | null }) {
   return (
     <header className="bg-white">
-      <div className="flex items-center justify-between max-w-7xl mx-auto">
+      <div className="flex items-center justify-between max-w-4xl mx-auto">
         <Link href="/" className="p-1.5">
-          <span className="sr-only">Your Company</span>
-          <Image
-            className="h-8 w-auto"
-            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-            alt=""
-            width={32}
-            height={32}
-          />
+          <span className="sr-only">blueskryb Company</span>
+          <BlueskrybLogotype className="h-8 w-auto fill-primary" />
         </Link>
-        <div className="py-6">
+        <div className="py-6 pr-2">
           {user ? (
             <div className="flex items-center gap-2">
-              <Link href={`/${user.handle}`}>
-                <AvatarUI user={user} />
-              </Link>
-              <LogoutButton />
+              <ProfileDropdown user={user} />
             </div>
           ) : (
-            <Link
-              className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-              href={`/login`}
-              rel="noopener noreferrer"
-            >
-              <BlueskyLogo className="size-6 dark:invert fill-background" />
-              Login with Bluesky
-            </Link>
+            <LoginButton />
           )}
         </div>
       </div>

@@ -29,9 +29,9 @@ export const authSession = pgTable('authSession', {
 
 export const user = pgTable('user', {
   id: serial('id').primaryKey(),
-  did: text('did').notNull(),
-  email: text('email'),
-  name: text('name').notNull(),
+  did: text('did'),
+  email: text('email').notNull(),
+  name: text('name'),
   handle: text('handle').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()

@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@import "tw-animate-css";
+@import 'tw-animate-css';
 /*
   ---break---
 */
@@ -26,7 +26,7 @@
 @layer utilities {
   :root {
     --background: #ffffff;
-    --foreground: #171717;
+    --foreground: #ccc;
   }
 
   @media (prefers-color-scheme: dark) {
@@ -96,18 +96,20 @@
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  /* --foreground: oklch(0.145 0 0); */
+  /* --foreground: oklch(0.26 0.0781 252.65); */
+  --foreground: oklch(0.22 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  --primary: oklch(0.32 0.1025 253.89);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
+  --accent: oklch(0.67 0.2211 37.48);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
@@ -178,3 +180,63 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* 
+
+
+Name: Oxford Blue
+
+Hex: #002347
+RGB: (0, 35, 71)
+CMYK: (100, 51, 0, 72)
+HSV: 210° 100% 28%
+HSL: 210° 100% 14%
+RAL: 5020
+Pantone: 282 C
+
+Name: Dark Midnight Blue
+
+Hex: #003366
+OKLCH: oklch(0.32 0.1025 253.89)
+RGB: (0, 51, 102)
+CMYK: (100, 50, 0, 60)
+HSV: 210° 100% 40%
+HSL: 210° 100% 20%
+RAL: 5020
+Pantone: 2955 C
+
+Name: Dark Cerulean
+
+Hex: #003F7D
+OKLCH: oklch(0.37 0.1196 254.35)
+RGB: (0, 63, 125)
+CMYK: (100, 50, 0, 51)
+HSV: 210° 100% 49%
+HSL: 210° 100% 25%
+RAL: 5010
+Pantone: 2154 C
+Name: Dark Orange
+Hex: #FF8E00
+RGB: (255, 142, 0)
+CMYK: (0, 44, 100, 0)
+HSV: 33° 100% 100%
+HSL: 33° 100% 50%
+RAL: 1028
+Pantone: 2013 C
+Name: Heat Wave
+Hex: #FD7702
+RGB: (253, 119, 2)
+CMYK: (0, 53, 99, 1)
+HSV: 28° 99% 99%
+HSL: 28° 98% 50%
+RAL: 1037
+Pantone: 151 C
+Name: Aerospace International Orange
+Hex: #FF5003
+OKLCH: oklch(0.67 0.2211 37.48)
+RGB: (255, 80, 3)
+CMYK: (0, 69, 99, 0)
+HSV: 18° 99% 100%
+HSL: 18° 100% 51%
+RAL: 2005
+Pantone: Orange 021 C */

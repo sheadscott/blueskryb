@@ -1,5 +1,5 @@
-import LoginButton from '@/components/login-button'
-import LogoutButton from '@/components/logout-button'
+import LoginButton from '@/components/auth/login-button'
+import LogoutButton from '@/components/auth/logout-button'
 import getSession from '@/lib/iron'
 
 export default async function Page() {
