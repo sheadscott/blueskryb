@@ -6,8 +6,6 @@ import {
 } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 
-console.log('getUserWithBooks')
-
 export async function getUserWithBooks(handle: string) {
   // Find the user by handle
   console.log('handle', handle)
@@ -22,10 +20,7 @@ export async function getUserWithBooks(handle: string) {
 
   // Find all books for this user (assuming a userBook join table)
   const userBooks = await db
-    .select({
-      title: bookTable.title,
-      author: bookTable.author,
-    })
+    .select({ title: bookTable.title, author: bookTable.author })
     .from(userBookTable)
     .innerJoin(bookTable, eq(userBookTable.bookId, bookTable.id))
     .where(eq(userBookTable.userId, user.id))

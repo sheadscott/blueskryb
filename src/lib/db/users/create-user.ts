@@ -6,5 +6,8 @@ export async function createUser(email: string, handle: string, did: string) {
     .insert(user)
     .values({ email, handle, name: null, did })
     .returning()
+  if (!created) {
+    throw new Error('Failed to create user.')
+  }
   return created
 }

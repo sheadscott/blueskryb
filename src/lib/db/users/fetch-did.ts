@@ -6,12 +6,7 @@ export async function fetchDid(handle: string) {
   )
   // console.timeEnd('bluesky_handle_check_fetch')
   if (response.status !== 200) {
-    throw new Error(
-      'bluesky_handle_check_fetch: ' +
-        response.status +
-        ' - ' +
-        response.statusText
-    )
+    throw new Error('No Bluesky user with that handle exists.')
   }
   return response.json()
 }

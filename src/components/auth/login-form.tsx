@@ -39,20 +39,13 @@ export default function LoginForm() {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setError(null)
-    try {
-      const url: string = await signInWithBluesky(values.handle)
-      router.push(url)
-    } catch (err) {
-      if (
-        err instanceof Error &&
-        err.message.includes('Failed to resolve identity')
-      ) {
-        setError(
-          'No Bluesky user was found that matches that handle. Please check the spelling and try again.'
-        )
-      } else {
-        setError(err instanceof Error ? err.message : 'Failed to sign in.')
-      }
+    const result = await signInWithBluesky(values.handle)
+    if (result.error) {
+      setError(result.error)
+      return
+    }
+    if (result.url) {
+      router.push(result.url)
     }
   }
   return (
