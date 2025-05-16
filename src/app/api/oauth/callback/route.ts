@@ -6,6 +6,12 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export const runtime = 'nodejs'
 
+console.log(
+  'process.env.NEXT_PUBLIC_VERCEL_URL',
+  process.env.NEXT_PUBLIC_VERCEL_URL
+)
+console.log('process.env.VERCEL_TARGET_ENV', process.env.VERCEL_TARGET_ENV)
+
 export async function GET(request: NextRequest) {
   // Get the next URL from the request
   const nextUrl = request.nextUrl
@@ -25,9 +31,7 @@ export async function GET(request: NextRequest) {
     const agent = new Agent(session)
 
     // Get the profile of the user
-    const { data } = await agent.getProfile({
-      actor: session.did,
-    })
+    const { data } = await agent.getProfile({ actor: session.did })
 
     // Find or create user in the database
     const dbUser = await findOrCreateUser(data)
