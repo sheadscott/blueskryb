@@ -1,11 +1,7 @@
 import { drizzle } from 'drizzle-orm/node-postgres'
-import pg from 'pg'
-
-const Pool =
-  (pg as typeof pg & { native?: { Pool: typeof pg.Pool } }).native?.Pool ??
-  pg.Pool
-
-console.log('Using Pool:', Pool === pg.Pool ? 'pg (JS)' : 'pg-native')
+import { Pool } from 'pg'
+// import { drizzle } from 'drizzle-orm/postgres-js'
+// import postgres from 'postgres'
 
 const connectionString = process.env.POSTGRES_URL
 if (!connectionString) {

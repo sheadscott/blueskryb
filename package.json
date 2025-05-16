@@ -38,8 +38,6 @@
     "next": "15.3.2",
     "papaparse": "^5.5.2",
     "pg": "^8.16.0",
-    "pg-native": "^3.5.0",
-    "postgres": "^3.4.5",
     "puppeteer": "^24.8.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
