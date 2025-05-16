@@ -98,11 +98,11 @@ export default function SignupForm() {
           </form>
         </Form>
       </CardContent>
-      {error ? (
-        <CardFooter>
-          {error && <div className="text-red-600 mb-4">{error}</div>}
-        </CardFooter>
-      ) : null}
+      <CardFooter>
+        By creating an account you agree to the Terms of Service and Privacy
+        Policy.
+        {error && <div className="text-red-600 mb-4">{error}</div>}
+      </CardFooter>
     </Card>
   )
 }

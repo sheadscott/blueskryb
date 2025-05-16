@@ -1,8 +1,9 @@
 'use server'
 
 import createBlueskyClient from '@/lib/atproto'
+import checkHandle from '@/lib/db/users/check-handle'
 import { createUser } from '@/lib/db/users/create-user'
-import { fetchDid } from '@/lib/db/users/fetch-did'
+import fetchDid from '@/lib/db/users/fetch-did'
 import { getUserByEmail } from '@/lib/db/users/get-user-by-email'
 import { getUserByHandle } from '@/lib/db/users/get-user-by-handle'
 import getSession from '@/lib/iron'
@@ -18,7 +19,7 @@ export async function signUp(
   }
 
   try {
-    await getUserByHandle(handle, 'signUp')
+    await getUserByHandle(handle)
   } catch (err) {
     return { error: err instanceof Error ? err.message : 'Handle exists' }
   }
@@ -56,13 +57,9 @@ export async function signUp(
 export async function signInWithBluesky(
   handle: string
 ): Promise<{ url?: string; error?: string }> {
-  try {
-    await getUserByHandle(handle, 'signIn')
-  } catch (err) {
-    return {
-      error:
-        err instanceof Error ? err.message : 'No user found with that handle.',
-    }
+  const user = await checkHandle(handle)
+  if (!user) {
+    return { error: 'No user found with that handle.' }
   }
 
   const blueskyClient = await createBlueskyClient()

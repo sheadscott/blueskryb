@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from '@vercel/og'
 
 export const runtime = 'edge'
@@ -21,6 +22,7 @@ export async function GET(request: Request) {
         }}
       >
         <img
+          alt="cover image"
           src={coverUrl}
           style={{
             maxHeight: 628 * 0.9,

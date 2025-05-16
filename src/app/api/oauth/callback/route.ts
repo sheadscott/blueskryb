@@ -5,19 +5,9 @@ import { getBaseUrl } from '@/lib/utils'
 import { Agent } from '@atproto/api'
 import { NextRequest, NextResponse } from 'next/server'
 
-console.log(
-  'process.env.NEXT_PUBLIC_VERCEL_URL',
-  process.env.NEXT_PUBLIC_VERCEL_URL
-)
-console.log('process.env.VERCEL_TARGET_ENV', process.env.VERCEL_TARGET_ENV)
-
 export async function GET(request: NextRequest) {
   // Get the next URL from the request
   const nextUrl = request.nextUrl
-  // const isLocalhost = process.env.NEXT_PUBLIC_VERCEL_URL?.includes('127.0.0.1')
-  // const url = isLocalhost
-  //   ? process.env.NEXT_PUBLIC_VERCEL_URL
-  //   : `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
   const baseUrl: string = getBaseUrl(process.env.VERCEL_TARGET_ENV as string)
   try {
     // Create a Bluesky client
