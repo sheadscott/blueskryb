@@ -8,5 +8,8 @@ export async function getUserByEmail(email: string) {
     .from(user)
     .where(eq(user.email, email))
     .limit(1)
-  return result[0] ?? null
+  if (result[0]) {
+    throw new Error('A user with that email already exists.')
+  }
+  return null
 }

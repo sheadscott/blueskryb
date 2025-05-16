@@ -29,7 +29,7 @@ export const authSession = pgTable('authSession', {
 
 export const user = pgTable('user', {
   id: serial('id').primaryKey(),
-  did: text('did'),
+  did: text('did').unique().notNull(),
   email: text('email').notNull(),
   name: text('name'),
   handle: text('handle').notNull(),

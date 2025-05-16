@@ -41,12 +41,13 @@ export default function SignupForm() {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setError(null)
-    try {
-      const url: string = await signUp(values.email, values.username)
-      router.push(url)
-    } catch (err) {
-      console.error('My Error: ', err)
-      setError(err instanceof Error ? err.message : 'Failed to sign up.')
+    const result = await signUp(values.email, values.username)
+    if (result.error) {
+      setError(result.error)
+      return
+    }
+    if (result.url) {
+      router.push(result.url)
     }
   }
   return (
