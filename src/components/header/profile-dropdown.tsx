@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { User } from '@/types/user'
-import LogoutButton from '../auth/logout-button'
+import LogoutLink from '../auth/logout-link'
 import AvatarUI from './avatar'
 
 export default function ProfileDropdown({ user }: { user: User }) {
@@ -28,7 +28,7 @@ export default function ProfileDropdown({ user }: { user: User }) {
           <Link href={`/${user.handle}/books`}>My Books</Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <LogoutButton />
+          <LogoutLink />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

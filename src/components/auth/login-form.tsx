@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import BlueskyLogo from '../header/bluesky-logo'
 
+import { ButtonLoading } from '@/components/ui/button-loading'
 import {
   Form,
   FormControl,
@@ -30,6 +31,8 @@ const formSchema = z.object({
 export default function LoginForm() {
   const router = useRouter()
   const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -39,6 +42,7 @@ export default function LoginForm() {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setError(null)
+    setIsLoading(true)
     const result = await signInWithBluesky(values.handle)
     if (result.error) {
       setError(result.error)
@@ -72,7 +76,11 @@ export default function LoginForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            {isLoading ? (
+              <ButtonLoading>Logging in...</ButtonLoading>
+            ) : (
+              <Button type="submit">Log In</Button>
+            )}
           </form>
         </Form>
       </CardContent>

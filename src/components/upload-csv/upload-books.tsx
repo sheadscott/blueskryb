@@ -119,7 +119,7 @@ export default function UploadBooks({ userId }: { userId: number }) {
                 </p>
               </div>
               {isLoading ? (
-                <ButtonLoading />
+                <ButtonLoading>Uploading File...</ButtonLoading>
               ) : (
                 <Button type="submit">Upload</Button>
               )}

@@ -20,6 +20,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { ButtonLoading } from '../ui/button-loading'
 
 const formSchema = z.object({
   username: z
@@ -31,6 +32,7 @@ const formSchema = z.object({
 export default function SignupForm() {
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -41,6 +43,7 @@ export default function SignupForm() {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setError(null)
+    setIsLoading(true)
     const result = await signUp(values.email, values.username)
     if (result.error) {
       setError(result.error)
@@ -94,7 +97,11 @@ export default function SignupForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            {isLoading ? (
+              <ButtonLoading>Signing up...</ButtonLoading>
+            ) : (
+              <Button type="submit">Sign Up</Button>
+            )}
           </form>
         </Form>
       </CardContent>
