@@ -20,7 +20,11 @@ export async function getUserWithBooks(handle: string) {
 
   // Find all books for this user (assuming a userBook join table)
   const userBooks = await db
-    .select({ title: bookTable.title, author: bookTable.author })
+    .select({
+      title: bookTable.title,
+      author: bookTable.author,
+      bookshopIsbn13: bookTable.bookshopIsbn13,
+    })
     .from(userBookTable)
     .innerJoin(bookTable, eq(userBookTable.bookId, bookTable.id))
     .where(eq(userBookTable.userId, user.id))

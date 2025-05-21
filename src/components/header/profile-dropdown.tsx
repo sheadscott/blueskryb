@@ -21,11 +21,14 @@ export default function ProfileDropdown({ user }: { user: User }) {
       <DropdownMenuContent className="mr-2">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem asChild>
           <Link href={`/${user.handle}`}>Profile</Link>
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem asChild>
           <Link href={`/${user.handle}/books`}>My Books</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href={`/${user.handle}/friends`}>Friends</Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
           <LogoutLink />

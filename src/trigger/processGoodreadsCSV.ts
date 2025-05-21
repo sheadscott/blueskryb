@@ -1,7 +1,4 @@
-import {
-  findBookshopIsbn13Brave,
-  findBookshopIsbn13GoogleBooks,
-} from '@/lib/books'
+import { findBookshopIsbn13ForBook } from '@/lib/books'
 import {
   CleanedGoodreadsBook,
   cleanGoodreadsCsvRow,
@@ -92,52 +89,13 @@ export const processGoodreadsCSV = task({
     // Wait 2 seconds and repeat for each book.
     // If the book doesn't have an isbn13, skip it.
     for (const b of newBooks) {
-      if (!b.isbn13) {
-        logger.log(
-          `Book doesn't have ISBN13. Trying to find bookshop isbn13 for: ${b.title}`
-        )
-        const isbn13 = await findBookshopIsbn13GoogleBooks(b.title, b.author)
-        if (isbn13) {
-          b.bookshopIsbn13 = isbn13
-        } else {
-          const isbn13 = await findBookshopIsbn13Brave(b.title, b.author)
-          if (isbn13) {
-            b.bookshopIsbn13 = isbn13
-          }
-        }
-      }
-      const url = `https://bookshop.org/book/${b.isbn13}`
-      try {
-        const res = await fetch(url, { method: 'HEAD' })
-        logger.log(
-          `Bookshop.org status for ${b.title} (${b.isbn13}): ${res.status}`
-        )
-        // If the status code is 200, write the isbn13 to a bookshopIsbn13 key so that we can write it to the database below
-        if (res.status === 200) {
-          b.bookshopIsbn13 = b.isbn13
-        } else {
-          // If the status code is not 200, make a request to the Google Books API
-
-          logger.log(
-            `Book has ISBN13. Trying to find bookshop isbn13 for: ${b.title}`
-          )
-          const isbn13 = await findBookshopIsbn13GoogleBooks(b.title, b.author)
-          if (isbn13) {
-            b.bookshopIsbn13 = isbn13
-          } else {
-            const isbn13 = await findBookshopIsbn13Brave(b.title, b.author)
-            if (isbn13) {
-              b.bookshopIsbn13 = isbn13
-            }
-          }
-        }
-      } catch (err) {
-        logger.error(
-          `Error fetching Bookshop.org for ${b.title} (${b.isbn13}):`,
-          { error: err }
-        )
-      }
-      // if (i < newBooks.length - 1) await wait.for({ seconds: 2 })
+      const foundIsbn13 = await findBookshopIsbn13ForBook({
+        isbn13: b.isbn13 ?? undefined,
+        isbn: b.isbn ?? undefined,
+        title: b.title,
+        author: b.author,
+      })
+      if (foundIsbn13) b.bookshopIsbn13 = foundIsbn13
     }
 
     let insertedBooks = []

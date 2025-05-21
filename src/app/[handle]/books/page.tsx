@@ -1,3 +1,4 @@
+import BookCover from '@/components/book/cover'
 import { getUserWithBooks } from '@/lib/db/books/get-all-user-books'
 import { notFound } from 'next/navigation'
 
@@ -13,10 +14,15 @@ export default async function HandlePage({
   return (
     <>
       <h1 className="font-bold text-lg pb-4">{handle} Books</h1>
-      <ul className="space-y-2">
+      <ul className="space-y-4">
         {userWithBooks.books.map((book) => (
-          <li key={book.title + book.author}>
-            <strong>{book.title}</strong> by {book.author}
+          <li className="flex gap-4" key={book.title + book.author}>
+            <BookCover isbn={book.bookshopIsbn13} />
+            <div className="flex flex-col">
+              <strong>{book.title}</strong>
+              <div>by {book.author}</div>
+              <div>{book.bookshopIsbn13}</div>
+            </div>
           </li>
         ))}
       </ul>

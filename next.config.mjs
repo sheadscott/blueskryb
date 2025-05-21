@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  images: {
+    remotePatterns: [new URL('https://images-us.bookshop.org/ingram/**')],
+  },
+}
 
 export default nextConfig
