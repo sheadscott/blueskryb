@@ -1,0 +1,146 @@
+{
+  "lexicon": 1,
+  "id": "cloud.blueskryb.book",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "tid",
+      "description": "A book in the user's library",
+      "record": {
+        "type": "object",
+        "required": ["title", "authors", "createdAt"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The title of the book",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "authors": {
+            "type": "array",
+            "description": "The authors of the book",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            }
+          },
+          "isbn10": {
+            "type": "string",
+            "description": "The ISBN-10 of the book",
+            "minLength": 10,
+            "maxLength": 10
+          },
+          "isbn13": {
+            "type": "string",
+            "description": "The ISBN-13 of the book",
+            "minLength": 13,
+            "maxLength": 13
+          },
+          "goodreadsId": {
+            "type": "integer",
+            "description": "The Goodreads ID of the book",
+            "minimum": 1
+          },
+          "readingStatus": {
+            "type": "string",
+            "knownValues": [
+              "cloud.blueskryb.defs#finished",
+              "cloud.blueskryb.defs#reading",
+              "cloud.blueskryb.defs#wantToRead",
+              "cloud.blueskryb.defs#notFinished"
+            ]
+          },
+          "rating": {
+            "type": "integer",
+            "description": "User's rating of the book (1-10) which will be mapped to 1-5 stars",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "publisher": {
+            "type": "string",
+            "description": "The publisher of the book",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "binding": {
+            "type": "string",
+            "description": "The binding of the book (hardcover, paperback, kindle, etc.)",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "numberOfPages": {
+            "type": "integer",
+            "description": "The number of pages in the book",
+            "minimum": 1
+          },
+          "publicationYear": {
+            "type": "integer",
+            "description": "The year the book was published"
+          },
+          "originalPublicationYear": {
+            "type": "integer",
+            "description": "The year the book was originally published"
+          },
+          "dateRead": {
+            "type": "string",
+            "format": "datetime",
+            "description": "The date the user read the book"
+          },
+          "dateAdded": {
+            "type": "string",
+            "format": "datetime",
+            "description": "The date the user added the book to their library"
+          },
+          "tags": {
+            "type": "array",
+            "description": "The tags the user has applied to the book",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            }
+          },
+          "privateNotes": {
+            "type": "string",
+            "description": "The user's private notes about the book",
+            "maxGraphemes": 15000
+          },
+          "readCount": {
+            "type": "integer",
+            "description": "The number of times the user has read the book",
+            "minimum": 0
+          },
+          "ownedCopies": {
+            "type": "integer",
+            "description": "The number of copies the user owns of the book",
+            "minimum": 0
+          },
+          "review": {
+            "type": "string",
+            "description": "The user's review of the book",
+            "maxGraphemes": 15000
+          },
+          "spoiler": {
+            "type": "boolean",
+            "description": "Whether the user has marked the entire book review as a spoiler"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "datetime",
+            "description": "The date the user started reading the book"
+          },
+          "finishedAt": {
+            "type": "string",
+            "format": "datetime",
+            "description": "The date the user finished reading the book"
+          }
+        }
+      }
+    }
+  }
+}

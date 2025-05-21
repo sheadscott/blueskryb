@@ -1,0 +1,22 @@
+{
+  "lexicon": 1,
+  "id": "cloud.blueskryb.defs",
+  "defs": {
+    "finished": {
+      "type": "token",
+      "description": "User has finished reading the book"
+    },
+    "reading": {
+      "type": "token",
+      "description": "User is currently reading the book"
+    },
+    "wantToRead": {
+      "type": "token",
+      "description": "User wants to read the book"
+    },
+    "notFinished": {
+      "type": "token",
+      "description": "User has stopped reading the book"
+    }
+  }
+}
