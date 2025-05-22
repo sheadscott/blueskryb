@@ -1,9 +1,6 @@
-'use client'
+import { BookCoverImage } from './cover-image'
 
-import Image from 'next/image'
-import { useState } from 'react'
-
-interface BookCoverProps {
+export interface BookCoverProps {
   isbn: string | null
   title?: string
   author?: string
@@ -12,33 +9,25 @@ interface BookCoverProps {
   height?: number
 }
 
-export default function BookCover({
-  isbn,
-  title,
-  author,
-  className,
-  width = 96,
-  height = 144,
-}: BookCoverProps) {
-  const fallback = '/default-cover.svg'
-  const [src, setSrc] = useState(
-    isbn ? `https://images-us.bookshop.org/ingram/${isbn}.jpg` : fallback
-  )
+export default function BookCover(props: BookCoverProps) {
+  const { isbn, title, author, className, width = 96, height = 144 } = props
+  const src = isbn
+    ? `https://images-us.bookshop.org/ingram/${isbn}.jpg`
+    : '/default-cover.svg'
 
   let alt = 'Book cover'
   if (title && author) alt = `Cover of ${title} by ${author}`
   else if (title) alt = `Cover of ${title}`
   else if (author) alt = `Book by ${author}`
 
+  // Use the client component for fallback logic
   return (
-    <Image
+    <BookCoverImage
       src={src}
       alt={alt}
       className={className}
       width={width}
       height={height}
-      onError={() => setSrc(fallback)}
-      loading="lazy"
     />
   )
 }

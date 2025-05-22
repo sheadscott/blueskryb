@@ -1,7 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    remotePatterns: [new URL('https://images-us.bookshop.org/ingram/**')],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images-us.bookshop.org',
+        pathname: '/ingram/**',
+      },
+    ],
   },
 }
 

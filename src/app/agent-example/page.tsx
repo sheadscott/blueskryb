@@ -45,18 +45,18 @@ export default async function AgentExamplePage() {
 
   const profileRecord = profileResponse?.data
 
-  const profile =
+  const profile: Profile.Record | undefined =
     profileRecord &&
     Profile.isRecord(profileRecord.value) &&
     Profile.validateRecord(profileRecord.value).success
       ? profileRecord.value
-      : {}
+      : undefined
 
   console.log(profile)
 
   return (
     <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-      <span>Private page, welcome {profile.displayName || 'User'}!</span>
+      <span>Private page, welcome {profile?.displayName || 'User'}!</span>
     </main>
   )
 }
