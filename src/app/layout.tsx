@@ -1,32 +1,32 @@
 import Header from '@/components/header/header'
 import getSession from '@/lib/iron'
 import type { Metadata } from 'next'
-import { EB_Garamond, Libre_Caslon_Text, Roboto } from 'next/font/google'
-import localFont from 'next/font/local'
+import { Roboto } from 'next/font/google'
+// import localFont from 'next/font/local'
 import './globals.css'
 
-const geistSans = localFont({
-  src: './fonts/GeistVF.woff',
-  variable: '--font-geist-sans',
-  weight: '100 900',
-})
-const geistMono = localFont({
-  src: './fonts/GeistMonoVF.woff',
-  variable: '--font-geist-mono',
-  weight: '100 900',
-})
+// const geistSans = localFont({
+//   src: './fonts/GeistVF.woff',
+//   variable: '--font-geist-sans',
+//   weight: '100 900',
+// })
+// const geistMono = localFont({
+//   src: './fonts/GeistMonoVF.woff',
+//   variable: '--font-geist-mono',
+//   weight: '100 900',
+// })
 
-const caslon = Libre_Caslon_Text({
-  weight: '400',
-  subsets: ['latin'],
-  variable: '--font-caslon',
-})
+// const caslon = Libre_Caslon_Text({
+//   weight: '400',
+//   subsets: ['latin'],
+//   variable: '--font-caslon',
+// })
 
-const garamond = EB_Garamond({
-  weight: '400',
-  subsets: ['latin'],
-  variable: '--font-garamond',
-})
+// const garamond = EB_Garamond({
+//   weight: '400',
+//   subsets: ['latin'],
+//   variable: '--font-garamond',
+// })
 
 const roboto = Roboto({
   weight: '400',
