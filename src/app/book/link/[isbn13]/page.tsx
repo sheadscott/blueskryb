@@ -26,7 +26,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     metadataBase: new URL(baseUrl),
     title,
     description,
-    themeColor: 'black',
     openGraph: {
       title,
       description,
