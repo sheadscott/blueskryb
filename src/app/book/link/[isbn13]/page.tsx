@@ -1,4 +1,5 @@
 import { getBaseUrl } from '@/lib/utils'
+import { decode } from 'html-entities'
 import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
@@ -20,7 +21,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const baseUrl: string = getBaseUrl(process.env.VERCEL_TARGET_ENV as string)
   const title = `${bookTitleBare} by ${author.name}`
-  const description = desc.html.replace(/<[^>]*>?/g, '').slice(0, 200)
+  let description = desc.html.replace(/<[^>]*>?/g, '').slice(0, 200)
+  description = decode(description)
 
   const ogImageUrl = `${baseUrl}/api/og?isbn=${isbn13}`
   // fetch data
@@ -78,3 +80,5 @@ export default async function Page({ params }: Props) {
     </div>
   )
 }
+
+// https://blueskryb-git-dev-shea-scotts-projects.vercel.app/book/link/9780316595643
