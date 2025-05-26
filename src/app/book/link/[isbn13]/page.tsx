@@ -1,5 +1,5 @@
+import { getBaseUrl } from '@/lib/utils'
 import type { Metadata } from 'next'
-
 type Props = {
   params: Promise<{ isbn13: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
@@ -15,11 +15,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const { bookTitleBare, author, description: desc } = goodreadsData[0]
 
-  const baseUrl = 'https://blueskryb.cloud'
+  const baseUrl: string = getBaseUrl(process.env.VERCEL_TARGET_ENV as string)
   const title = `${bookTitleBare} by ${author.name}`
   const description = desc.html.replace(/<[^>]*>?/g, '').slice(0, 200)
 
-  const ogImageUrl = `http://localhost:3000/api/og?isbn=${isbn13}`
+  const ogImageUrl = `${baseUrl}/api/og?isbn=${isbn13}`
   // fetch data
 
   return {
