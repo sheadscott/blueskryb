@@ -4,6 +4,7 @@ import BlueskrybLogoCombo from './blueskryb-logo-combo'
 import ProfileDropdown from './profile-dropdown'
 
 export default function Header({ user }: { user: User | null }) {
+  console.log('USER', user)
   return (
     <header className="bg-white pt-4">
       <div

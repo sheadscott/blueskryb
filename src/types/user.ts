@@ -3,5 +3,6 @@ export interface User {
   did: string
   handle: string
   name: string
+  displayName?: string | null
   avatar: string | null
 }

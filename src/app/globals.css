@@ -21,6 +21,12 @@
   ::file-selector-button {
     border-color: var(--color-gray-200, currentcolor);
   }
+  h1 {
+    @apply mb-4 text-2xl font-bold;
+  }
+  h2 {
+    @apply mb-4 text-xl font-bold;
+  }
 }
 
 @layer utilities {

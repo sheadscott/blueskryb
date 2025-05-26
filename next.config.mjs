@@ -7,6 +7,11 @@ const nextConfig = {
         hostname: 'images-us.bookshop.org',
         pathname: '/ingram/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'cdn.bsky.app',
+        pathname: '/**',
+      },
     ],
   },
 }
