@@ -5,40 +5,62 @@ export const runtime = 'edge'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  const url = searchParams.get('url')
-  if (!url) {
-    return new Response('Missing url param', { status: 400 })
+  const isbn = searchParams.get('isbn')
+  if (!isbn) {
+    return new Response('Missing isbn param', { status: 400 })
   }
-  if (!url.startsWith('https://bookshop.org/')) {
-    return new Response('Invalid url', { status: 400 })
-  }
-
-  console.log('url', url)
-  // Example Bookshop.org url:
-  // https://bookshop.org/p/books/a-court-of-thorns-and-roses-sarah-j-maas/7173214?ean=9781635575569&next=t
-
-  // Get the isbn13 (ean) from the url
-  const match = url.match(/97\d{11}/)
-  const isbn13 = match?.[0]
-  if (!isbn13) {
-    return new Response('Invalid url. No ISBN13 found.', { status: 400 })
+  const isbnRegex = /^97\d{11}$/
+  if (!isbnRegex.test(isbn)) {
+    return new Response('Invalid isbn', { status: 400 })
   }
 
-  console.log('isbn13', isbn13)
+  // Load fonts from the public folder using fetch
+  const [robotoSerifResponse, robotoRegularResponse] = await Promise.all([
+    fetch(new URL('/fonts/RobotoSerif_36pt-Bold.ttf', request.url)),
+    fetch(new URL('/fonts/Roboto-Regular.ttf', request.url)),
+  ])
 
-  const goodreadsApiUrl = `https://www.goodreads.com/book/auto_complete?q=${isbn13}&format=json`
+  let robotoSerifFont = null
+  let robotoRegularFont = null
+
+  if (!robotoSerifResponse.ok) {
+    console.error('Roboto Serif font fetch failed:', robotoSerifResponse.status)
+  } else {
+    robotoSerifFont = await robotoSerifResponse.arrayBuffer()
+    console.log('Roboto Serif loaded, size:', robotoSerifFont.byteLength)
+  }
+
+  if (!robotoRegularResponse.ok) {
+    console.error(
+      'Roboto Regular font fetch failed:',
+      robotoRegularResponse.status
+    )
+  } else {
+    robotoRegularFont = await robotoRegularResponse.arrayBuffer()
+    console.log('Roboto Regular loaded, size:', robotoRegularFont.byteLength)
+  }
+
+  const goodreadsApiUrl = `https://www.goodreads.com/book/auto_complete?q=${isbn}&format=json`
   const goodreadsResponse = await fetch(goodreadsApiUrl)
   const goodreadsData = await goodreadsResponse.json()
   console.log('goodreadsData', goodreadsData)
 
-  const { imageUrl, bookTitleBare, author, description } = goodreadsData[0]
-  const coverUrl = imageUrl.replace(/\._[A-Z][A-Z]\d+_/, '')
-  // No longer than 200 characters
-  const descriptionHtml = description.html
-    .replace(/<[^>]*>?/g, '')
-    .slice(0, 200)
-    .trim()
+  if (
+    !goodreadsData ||
+    !Array.isArray(goodreadsData) ||
+    goodreadsData.length === 0
+  ) {
+    return new Response('No book data found', { status: 404 })
+  }
 
+  const bookData = goodreadsData[0]
+  const { imageUrl, bookTitleBare, author } = bookData
+
+  if (!imageUrl || !bookTitleBare || !author) {
+    return new Response('Incomplete book data', { status: 404 })
+  }
+
+  const coverUrl = imageUrl.replace(/\._[A-Z][A-Z]\d+_/, '')
   return new ImageResponse(
     (
       <div
@@ -47,7 +69,7 @@ export async function GET(request: Request) {
           height: 628,
           display: 'flex',
           justifyContent: 'flex-start',
-          gap: 64,
+          gap: 48,
           background: '#f7f7f7',
           paddingTop: 32,
           paddingBottom: 32,
@@ -71,47 +93,88 @@ export async function GET(request: Request) {
           style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: 8,
+            gap: 4,
+            maxWidth: 700,
           }}
         >
-          <h1 style={{ fontSize: 36, fontWeight: 700, lineHeight: 1.2 }}>
-            {bookTitleBare}
-          </h1>
-          <p style={{ fontSize: 24, fontWeight: 400, lineHeight: 1.2 }}>
-            By {author.name}
-          </p>
-          <p
+          <h1
             style={{
-              fontSize: 18,
-              fontWeight: 500,
+              fontSize: 42,
+              fontWeight: 700,
               lineHeight: 1.2,
-              maxWidth: 600,
-              flexGrow: 1,
+              fontFamily: 'Roboto Serif',
             }}
           >
-            {descriptionHtml}
-          </p>
-          <div
-            style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}
+            {bookTitleBare}
+          </h1>
+          <p
+            style={{
+              fontSize: 36,
+              fontWeight: 400,
+              lineHeight: 1.2,
+              flexGrow: 1,
+              fontFamily: 'Roboto Serif',
+            }}
           >
-            <p style={{ fontSize: 14, fontWeight: 400, lineHeight: 1.2 }}>
+            By {author.name}
+          </p>
+
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              gap: 8,
+            }}
+          >
+            <p
+              style={{
+                fontSize: 24,
+                fontWeight: 400,
+                lineHeight: 1.2,
+                fontFamily: 'Roboto',
+              }}
+            >
               Bookshop.org supports independent bookstores.
             </p>
             <img
               alt="Bookshop.org"
               src="https://cdn.prod.website-files.com/6267f35934aa8b1795cf1a9f/63e3d7713ec753b653c3136c_Button1-WF.png"
-              style={{ height: 48, objectFit: 'contain' }}
+              style={{ height: 80, objectFit: 'contain' }}
             />
           </div>
 
-          <p style={{ fontSize: 14, maxWidth: 600 }}>
-            Disclosure: This link is a product of Blueskryb.cloud, an affiliate
+          <p style={{ fontSize: 24, fontFamily: 'Roboto' }}>
+            Disclosure: This link is provided by Blueskryb.cloud, an affiliate
             of Bookshop.org and will earn a commission if you click through and
             make a purchase.
           </p>
         </div>
       </div>
     ),
-    { width: 1200, height: 628 }
+    {
+      width: 1200,
+      height: 628,
+      fonts: [
+        ...(robotoSerifFont
+          ? [
+              {
+                name: 'Roboto Serif',
+                data: robotoSerifFont,
+                style: 'normal' as const,
+              },
+            ]
+          : []),
+        ...(robotoRegularFont
+          ? [
+              {
+                name: 'Roboto',
+                data: robotoRegularFont,
+                style: 'normal' as const,
+              },
+            ]
+          : []),
+      ],
+    }
   )
 }

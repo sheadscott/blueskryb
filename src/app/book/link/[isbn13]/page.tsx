@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = `${bookTitleBare} by ${author.name}`
   const description = desc.html.replace(/<[^>]*>?/g, '').slice(0, 200)
 
-  const ogImageUrl = `https://blueskryb-git-dev-shea-scotts-projects.vercel.app/api/og?url=https://bookshop.org/p/books/a-court-of-thorns-and-roses-sarah-j-maas/7173214?ean=9781635575569&next=t`
+  const ogImageUrl = `http://localhost:3000/api/og?isbn=${isbn13}`
   // fetch data
 
   return {
