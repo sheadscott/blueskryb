@@ -1,8 +1,14 @@
-import { User } from '@/types/user'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export default function UserListItem({ user }: { user: User }) {
+interface MinimalUser {
+  did: string
+  handle: string
+  displayName?: string
+  avatar?: string
+}
+
+export default function UserListItem({ user }: { user: MinimalUser }) {
   return (
     <Link href={`https://bsky.app/profile/${user.handle}`}>
       <div className="mb-4 hover:opacity-50 transition-opacity">

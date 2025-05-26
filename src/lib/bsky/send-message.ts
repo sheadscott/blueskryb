@@ -2,7 +2,7 @@
 
 import { AtpAgent } from '@atproto/api'
 
-async function sendChat(msg) {
+async function sendChat(msg: string) {
   const agent = new AtpAgent({ service: 'https://bsky.social' })
 
   await agent.login({
@@ -13,7 +13,9 @@ async function sendChat(msg) {
 
   const proxy = agent.withProxy('bsky_chat', 'did:web:api.bsky.chat')
 
-  const { profile } = await agent.getProfile({ actor: 'TargetHandleForChat' })
+  const { data: profile } = await agent.getProfile({
+    actor: 'TargetHandleForChat',
+  })
 
   const convo = await proxy.chat.bsky.convo.getConvoForMembers({
     members: [profile['did']],
