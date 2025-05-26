@@ -1,5 +1,8 @@
 import { getBaseUrl } from '@/lib/utils'
 import type { Metadata } from 'next'
+import { headers } from 'next/headers'
+import { redirect } from 'next/navigation'
+
 type Props = {
   params: Promise<{ isbn13: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
@@ -47,19 +50,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params }: Props) {
   const { isbn13 } = await params
-  return <div>Book details here {isbn13}</div>
+  const headersList = await headers()
+  const userAgent = headersList.get('user-agent') || ''
+
+  // Check if it's a bot
+  const isBot =
+    /apple.*|facebook.*|linkedin.*|twitter.*|pinterest.*|whatsapp.*|slack.*|discord.*|mastodon.*|b(lue)?sky.*/i.test(
+      userAgent
+    )
+
+  // If it's not a bot, redirect to affiliate link
+  if (!isBot) {
+    redirect(`https://bookshop.org/a/113619/${isbn13}`)
+  }
+
+  // If it's a bot, serve the page with metadata (they'll see the generateMetadata content)
+  return (
+    <div>
+      <h1>Book Information</h1>
+      <p>This page provides book metadata for social media previews.</p>
+      <p>ISBN: {isbn13}</p>
+    </div>
+  )
 }
-
-// export async function GET(request: Request) {
-//   const userAgent = request.headers.get('user-agent') || ''
-//   const isBot =
-//     /apple.*|facebook.*|linkedin.*|twitter.*|pinterest.*|whatsapp.*|slack.*|discord.*|mastodon.*|b(lue)?sky.*/i.test(
-//       userAgent
-//     )
-
-//   if (isBot) {
-//     // Serve OG image or metadata
-//   } else {
-//     // Serve normal page or redirect
-//   }
-// }
