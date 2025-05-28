@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label'
 import { extractIsbn13FromBookshopUrl, getBaseUrl } from '@/lib/utils'
 import { Copy, ExternalLink, Loader2 } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useMemo, useState } from 'react'
 
 export default function LinkGeneratorPage() {
@@ -114,7 +115,15 @@ export default function LinkGeneratorPage() {
             Bookshop.org Pretty Link Generator
           </h1>
           <p className="mt-2 text-muted-foreground">
-            Convert Bookshop.org URLs to pretty links
+            Convert{' '}
+            <Link
+              href="https://bookshop.org"
+              target="_blank"
+              className="underline hover:text-primary"
+            >
+              Bookshop.org
+            </Link>{' '}
+            URLs to pretty links
           </p>
         </div>
 
@@ -130,7 +139,15 @@ export default function LinkGeneratorPage() {
               className="w-full"
             />
             <p className="text-sm text-muted-foreground">
-              Paste a Bookshop.org URL that contains an ISBN (ean)
+              Paste a{' '}
+              <Link
+                href="https://bookshop.org"
+                target="_blank"
+                className="underline hover:text-primary"
+              >
+                Bookshop.org
+              </Link>{' '}
+              URL that contains an ISBN (ean)
             </p>
           </div>
 
