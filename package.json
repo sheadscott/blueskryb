@@ -17,7 +17,8 @@
     "drizzle:migrate": "npx drizzle-kit migrate",
     "sb:dev": "open http://127.0.0.1:54323",
     "sb:staging": "open https://supabase.com/dashboard/project/nnmhzennsdxwcqghureb",
-    "vercel:open": "open https://vercel.com/shea-scotts-projects/blueskryb/deployments"
+    "vercel:open": "open https://vercel.com/shea-scotts-projects/blueskryb/deployments",
+    "vercel:view:dev": "open https://blueskryb-git-dev-shea-scotts-projects.vercel.app"
   },
   "dependencies": {
     "@atproto/api": "^0.15.8",

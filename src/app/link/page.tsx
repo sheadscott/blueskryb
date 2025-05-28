@@ -43,6 +43,7 @@ export default function LinkGeneratorPage() {
       // Only clear and update image if we have a new ISBN
       const newOgImageApiUrl = `/api/og?isbn=${isbn13}`
       if (ogImageUrl !== newOgImageApiUrl) {
+        setImageLoading(false)
         setOgImageUrl('')
         setOgImageUrl(newOgImageApiUrl)
       }
@@ -90,6 +91,7 @@ export default function LinkGeneratorPage() {
             alt="Generated book card"
             width={1200}
             height={630}
+            key={ogImageUrl}
             className="w-full rounded-md shadow-sm"
             onLoadStart={() => setImageLoading(true)}
             onLoad={() => setImageLoading(false)}

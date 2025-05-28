@@ -61,6 +61,70 @@ export async function GET(request: Request) {
   }
 
   const coverUrl = imageUrl.replace(/\._[A-Z][A-Z]\d+_/, '')
+
+  // Pre-fetch the cover image with retry logic (except for 404s)
+  const maxRetries = 3
+  let coverResponse
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      coverResponse = await fetch(coverUrl)
+      if (coverResponse.ok) {
+        console.log('Cover image validated:', coverUrl)
+        break
+      }
+
+      if (coverResponse.status === 404) {
+        console.error('Cover image not found (404):', coverUrl)
+        return new Response('Cover image not found', { status: 404 })
+      }
+
+      console.warn(
+        `Cover image fetch failed (attempt ${attempt}/${maxRetries}):`,
+        coverResponse.status,
+        coverUrl
+      )
+
+      if (attempt === maxRetries) {
+        console.error(
+          'Cover image fetch failed after all retries:',
+          coverResponse.status,
+          coverUrl
+        )
+        return new Response('Cover image not accessible after retries', {
+          status: 404,
+        })
+      }
+
+      // Wait before retrying (exponential backoff)
+      await new Promise((resolve) =>
+        setTimeout(resolve, Math.pow(2, attempt - 1) * 1000)
+      )
+    } catch (error) {
+      console.warn(
+        `Cover image fetch error (attempt ${attempt}/${maxRetries}):`,
+        error,
+        coverUrl
+      )
+
+      if (attempt === maxRetries) {
+        console.error(
+          'Cover image fetch error after all retries:',
+          error,
+          coverUrl
+        )
+        return new Response('Cover image fetch error after retries', {
+          status: 404,
+        })
+      }
+
+      // Wait before retrying (exponential backoff)
+      await new Promise((resolve) =>
+        setTimeout(resolve, Math.pow(2, attempt - 1) * 1000)
+      )
+    }
+  }
+
   return new ImageResponse(
     (
       <div
@@ -71,21 +135,16 @@ export async function GET(request: Request) {
           justifyContent: 'flex-start',
           gap: 48,
           background: '#FFFFFF',
-          paddingTop: 32,
-          paddingBottom: 32,
-          paddingLeft: 36,
-          paddingRight: 36,
         }}
       >
         <img
           alt="cover image"
           src={coverUrl}
           style={{
-            maxHeight: 628 - 64,
-            maxWidth: 376,
+            height: 628,
+            width: 420,
             objectFit: 'cover',
             boxShadow: '0 4px 32px rgba(0,0,0,0.15)',
-            borderRadius: 16,
             background: '#fff',
           }}
         />
@@ -155,6 +214,11 @@ export async function GET(request: Request) {
     {
       width: 1200,
       height: 628,
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0',
+      },
       fonts: [
         ...(robotoSerifFont
           ? [

@@ -34,4 +34,4 @@ export function extractIsbn13FromBookshopUrl(url: string): string | null {
   }
 }
 
-export const isbn13Regex = /97(?:-?\d){11}/g
+export const isbn13Regex = /97(?:-?\d){11}/
