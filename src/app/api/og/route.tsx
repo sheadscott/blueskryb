@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { isbn13Regex } from '@/lib/utils'
 import { ImageResponse } from '@vercel/og'
 
 export const runtime = 'edge'
@@ -9,8 +10,7 @@ export async function GET(request: Request) {
   if (!isbn) {
     return new Response('Missing isbn param', { status: 400 })
   }
-  const isbnRegex = /^97\d{11}$/
-  if (!isbnRegex.test(isbn)) {
+  if (!isbn13Regex.test(isbn)) {
     return new Response('Invalid isbn', { status: 400 })
   }
 
@@ -43,7 +43,7 @@ export async function GET(request: Request) {
   const goodreadsApiUrl = `https://www.goodreads.com/book/auto_complete?q=${isbn}&format=json`
   const goodreadsResponse = await fetch(goodreadsApiUrl)
   const goodreadsData = await goodreadsResponse.json()
-  console.log('goodreadsData', goodreadsData)
+  // console.log('goodreadsData', goodreadsData)
 
   if (
     !goodreadsData ||
@@ -70,7 +70,7 @@ export async function GET(request: Request) {
           display: 'flex',
           justifyContent: 'flex-start',
           gap: 48,
-          background: '#f7f7f7',
+          background: '#FFFFFF',
           paddingTop: 32,
           paddingBottom: 32,
           paddingLeft: 36,

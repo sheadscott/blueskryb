@@ -17,10 +17,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const goodreadsData = await goodreadsResponse.json()
   // console.log('goodreadsData', goodreadsData)
 
-  const { bookTitleBare, author, description: desc } = goodreadsData[0]
+  const { bookTitleBare, description: desc } = goodreadsData[0]
 
   const baseUrl: string = getBaseUrl(process.env.VERCEL_TARGET_ENV as string)
-  const title = `${bookTitleBare} by ${author.name}`
+  // const title = `${bookTitleBare} by ${author.name}`
+  const title = `${bookTitleBare}`
   let description = desc.html.replace(/<[^>]*>?/g, '').slice(0, 200)
   description = decode(description)
 
@@ -82,3 +83,12 @@ export default async function Page({ params }: Props) {
 }
 
 // https://blueskryb-git-dev-shea-scotts-projects.vercel.app/book/link/9780316595643
+
+// 9781635575804
+// https://blueskryb-git-dev-shea-scotts-projects.vercel.app/book/link/9781635575804
+
+// 9781250391230
+// https://blueskryb-git-dev-shea-scotts-projects.vercel.app/book/link/9781250391230
+
+// 9780060976255
+// https://blueskryb-git-dev-shea-scotts-projects.vercel.app/book/link/9780060976255

@@ -5,10 +5,10 @@ import LoginButton from '@/components/auth/login-button'
 import UserListItem from '@/components/user/user-list-item'
 import * as Profile from '@/lexicon/types/app/bsky/actor/profile'
 import { getAgent } from '@/lib/atproto-agent'
-import { createPost } from '@/lib/bsky/create-post'
+// import { createPost } from '@/lib/bsky/create-post'
 import { getUsersByDid } from '@/lib/db/users/get-users-by-did'
 
-export default async function AgentExamplePage() {
+export default async function FriendsPage() {
   const session = await getSession()
   const agent = await getAgent()
 
@@ -27,8 +27,8 @@ export default async function AgentExamplePage() {
     )
   }
 
-  const postText = `✨ example mentioning @atproto.com to share the URL 👨‍❤️‍👨 https://en.wikipedia.org/wiki/CBOR.`
-  await createPost(postText, agent)
+  // const postText = `✨ example mentioning @atproto.com to share the URL 👨‍❤️‍👨 https://en.wikipedia.org/wiki/CBOR.`
+  // await createPost(postText, agent)
 
   // Example: fetch the user's profile record
   // const profile = await agent.com.atproto.repo.getRecord({

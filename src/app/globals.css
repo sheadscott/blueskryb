@@ -22,10 +22,10 @@
     border-color: var(--color-gray-200, currentcolor);
   }
   h1 {
-    @apply mb-4 text-2xl font-bold;
+    @apply mb-4 font-serif text-2xl font-bold;
   }
   h2 {
-    @apply mb-4 text-xl font-bold;
+    @apply mb-4 font-serif text-xl font-bold;
   }
 }
 
@@ -93,9 +93,8 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  /* --font-serif: var(--font-caslon); */
-  --font-serif: var(--font-garamond);
   --font-sans: var(--font-roboto);
+  --font-serif: var(--font-roboto-serif);
 }
 
 /*

@@ -8,7 +8,7 @@ export default function Header({ user }: { user: User | null }) {
   return (
     <header className="bg-white pt-4">
       <div
-        className={`flex items-center justify-between max-w-4xl mx-auto mt-4 ${
+        className={`flex items-center justify-between max-w-4xl mx-auto md:mt-4 ${
           user ? 'content-center' : 'content-start'
         }`}
       >

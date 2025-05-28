@@ -34,3 +34,6 @@ export function BookCoverImage({
     />
   )
 }
+
+// https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:hekesxwmqrhmfbf77qe6jhe4/bafkreifnlryp65qn76dhkfnfgtrs7avtrg2hlkcjlqmgpfqq7hjql4spa4@jpeg
+// https://atproto-browser.vercel.app/blob/did:plc:hekesxwmqrhmfbf77qe6jhe4/bafkreifnlryp65qn76dhkfnfgtrs7avtrg2hlkcjlqmgpfqq7hjql4spa4

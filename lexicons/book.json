@@ -25,6 +25,12 @@
               "maxLength": 256
             }
           },
+          "cover": {
+            "type": "blob",
+            "description": "Cover image of the book",
+            "accept": ["image/webp"],
+            "maxSize": 1000000
+          },
           "isbn10": {
             "type": "string",
             "description": "The ISBN-10 of the book",

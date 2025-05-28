@@ -54,6 +54,10 @@ export const processGoodreadsCSV = task({
     const uniqueBooks = dedupeBooks(results)
     logger.log(`Unique books for insert: ${JSON.stringify(uniqueBooks)}`)
 
+    // Upload all the books to the atproto collection
+    // const agent = await getAgent()
+    // await uploadBooksToAtproto(agent, uniqueBooks)
+
     const existingBooks = await db
       .select()
       .from(bookTable)
