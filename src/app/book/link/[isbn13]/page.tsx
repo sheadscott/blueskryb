@@ -54,7 +54,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       openGraph: {
         title,
         description,
-        url: baseUrl,
+        url: 'https://blueskryb.cloud',
         images: [
           {
             url: ogImageUrl,
