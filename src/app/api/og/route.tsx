@@ -141,10 +141,10 @@ export async function GET(request: Request) {
           alt="cover image"
           src={coverUrl}
           style={{
-            borderRadius: 6,
-            height: 600,
-            width: 400,
-            margin: 14,
+            // borderRadius: 6,
+            height: 628 - 56,
+            width: (628 - 56) * 0.667,
+            margin: 28,
             padding: 0,
             objectFit: 'cover',
             boxShadow: '0 4px 32px rgba(0,0,0,0.15)',
@@ -157,6 +157,8 @@ export async function GET(request: Request) {
             flexDirection: 'column',
             gap: 4,
             maxWidth: 700,
+            paddingTop: 14,
+            paddingBottom: 14,
           }}
         >
           <h1
@@ -206,7 +208,7 @@ export async function GET(request: Request) {
             />
           </div>
 
-          <p style={{ fontSize: 24, fontFamily: 'Roboto' }}>
+          <p style={{ fontSize: 24, fontFamily: 'Roboto', paddingRight: 36 }}>
             Disclosure: This link is provided by Blueskryb.cloud, an affiliate
             of Bookshop.org and will earn a commission if you click through and
             make a purchase.
