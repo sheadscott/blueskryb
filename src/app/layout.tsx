@@ -1,7 +1,7 @@
 import Header from '@/components/header/header'
 import getSession from '@/lib/iron'
 import type { Metadata } from 'next'
-import { Roboto, Roboto_Serif } from 'next/font/google'
+import { League_Spartan, Libre_Baskerville } from 'next/font/google'
 // import localFont from 'next/font/local'
 import './globals.css'
 
@@ -10,17 +10,16 @@ import './globals.css'
 //   subsets: ['latin'],
 //   variable: '--font-lora',
 // })
-
-const roboto = Roboto({
+const leagueSpartan = League_Spartan({
   weight: '400',
   subsets: ['latin'],
-  variable: '--font-roboto',
+  variable: '--font-league-spartan',
 })
 
-const robotoSerif = Roboto_Serif({
+const libreBaskerville = Libre_Baskerville({
   weight: '400',
   subsets: ['latin'],
-  variable: '--font-roboto-serif',
+  variable: '--font-libre-baskerville',
 })
 
 export const metadata: Metadata = {
@@ -58,7 +57,7 @@ export default async function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body
-        className={`${roboto.variable} ${robotoSerif.variable} font-sans antialiased`}
+        className={`${libreBaskerville.variable} ${leagueSpartan.variable} font-sans antialiased`}
       >
         <div className="container mx-auto px-4">
           <Header user={session.user} />

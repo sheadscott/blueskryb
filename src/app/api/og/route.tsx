@@ -141,8 +141,11 @@ export async function GET(request: Request) {
           alt="cover image"
           src={coverUrl}
           style={{
-            height: 628,
-            width: 420,
+            borderRadius: 6,
+            height: 600,
+            width: 400,
+            margin: 14,
+            padding: 0,
             objectFit: 'cover',
             boxShadow: '0 4px 32px rgba(0,0,0,0.15)',
             background: '#fff',

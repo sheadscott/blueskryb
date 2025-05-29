@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import { ButtonLoading } from '@/components/ui/button-loading'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { extractIsbn13FromBookshopUrl, getBaseUrl } from '@/lib/utils'
@@ -15,7 +16,6 @@ export default function LinkGeneratorPage() {
   const [ogImageUrl, setOgImageUrl] = useState('')
   const [error, setError] = useState('')
   const [copied, setCopied] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [imageLoading, setImageLoading] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
@@ -23,7 +23,7 @@ export default function LinkGeneratorPage() {
     setError('')
     setGeneratedLink('')
     setCopied(false)
-    setIsLoading(true)
+    setImageLoading(true)
 
     try {
       if (!bookshopUrl.trim()) {
@@ -44,7 +44,7 @@ export default function LinkGeneratorPage() {
       // Only clear and update image if we have a new ISBN
       const newOgImageApiUrl = `/api/og?isbn=${isbn13}`
       if (ogImageUrl !== newOgImageApiUrl) {
-        setImageLoading(false)
+        setImageLoading(true)
         setOgImageUrl('')
         setOgImageUrl(newOgImageApiUrl)
       }
@@ -58,8 +58,7 @@ export default function LinkGeneratorPage() {
     } catch (err) {
       setError('An error occurred while processing the URL')
       console.error(err)
-    } finally {
-      setIsLoading(false)
+      setImageLoading(false)
     }
   }
 
@@ -81,10 +80,8 @@ export default function LinkGeneratorPage() {
         <Label>Generated Book Cover Image</Label>
         <div className="rounded-md border bg-muted md:p-4 relative w-full">
           {imageLoading && (
-            <div className="w-full min-h-64">
-              <div className="absolute inset-0 flex items-center justify-center bg-muted rounded-md">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              </div>
+            <div className="absolute inset-0 flex items-center justify-center bg-muted rounded-md z-10">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
           )}
           <Image
@@ -110,11 +107,11 @@ export default function LinkGeneratorPage() {
   return (
     <div className="container mx-auto max-w-2xl py-8">
       <div className="space-y-6">
-        <div className="text-center">
+        <div className="text-center mb-12">
           <h1 className="text-3xl font-bold tracking-tight">
             Bookshop.org Pretty Link Generator
           </h1>
-          <p className="mt-2 text-muted-foreground">
+          <p className="font-sans mt-2 text-lg">
             Convert{' '}
             <Link
               href="https://bookshop.org"
@@ -157,10 +154,14 @@ export default function LinkGeneratorPage() {
             </div>
           )}
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            <ExternalLink className="mr-2 h-4 w-4" />
-            {isLoading ? 'Generating...' : 'Generate Blueskryb Link'}
-          </Button>
+          {imageLoading ? (
+            <ButtonLoading className="w-full">Generating Link...</ButtonLoading>
+          ) : (
+            <Button type="submit" className="w-full">
+              <ExternalLink className="mr-2 h-4 w-4" />
+              Generate Link
+            </Button>
+          )}
         </form>
 
         {imageSection}
