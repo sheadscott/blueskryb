@@ -5,7 +5,8 @@ import {
 } from '@atproto/oauth-client-node'
 import { getBaseUrl } from './utils'
 export function blueskyClientMetadata(): OAuthClientMetadataInput {
-  const baseUrl: string = getBaseUrl(process.env.VERCEL_TARGET_ENV as string)
+  const { VERCEL_TARGET_ENV: vercelTargetEnv } = process.env
+  const baseUrl: string = getBaseUrl(vercelTargetEnv as string)
   console.log('baseUrl from atproto.ts', baseUrl)
   const isLocalhost = baseUrl.includes('127.0.0.1')
   const enc = encodeURIComponent
@@ -13,7 +14,9 @@ export function blueskyClientMetadata(): OAuthClientMetadataInput {
     client_name: 'Blueskryb',
     client_id: isLocalhost
       ? `http://localhost?redirect_uri=${enc(`${baseUrl}/api/oauth/callback`)}&scope=${enc('atproto transition:generic')}`
-      : `${baseUrl}/client-metadata.json?x-vercel-protection-bypass=8fF3fbaibcMhd2dNCGwb3683ujcUsAFh`,
+      : vercelTargetEnv === 'production'
+        ? `${baseUrl}/client-metadata.json`
+        : `${baseUrl}/client-metadata.json?x-vercel-protection-bypass=8fF3fbaibcMhd2dNCGwb3683ujcUsAFh`,
     client_uri: `${baseUrl}`,
     redirect_uris: [`${baseUrl}/api/oauth/callback`],
     policy_uri: `${baseUrl}/policy`,

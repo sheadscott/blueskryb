@@ -1,9 +1,14 @@
 import ComboForm from '@/components/auth/combo-form'
 import UploadBooks from '@/components/upload-csv/upload-books'
 import getSession from '@/lib/iron'
+import { redirect } from 'next/navigation'
 
 export default async function Home() {
   const session = await getSession()
+  // if env is production, redirect to https://blueskryb.cloud/link
+  if (process.env.VERCEL_ENV === 'production') {
+    return redirect('https://blueskryb.cloud/link')
+  }
   // console.log('Session: ', session.user)
   return (
     <>
