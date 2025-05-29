@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export function getBaseUrl(env: string) {
   if (env === 'production') {
-    return 'https://blueskryb.cloud'
+    return 'https://www.blueskryb.cloud'
   }
   if (env === 'preview') {
     return 'https://blueskryb-git-dev-shea-scotts-projects.vercel.app'
