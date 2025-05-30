@@ -57,6 +57,7 @@ export const book = pgTable('book', {
   numOfPages: integer('num_of_pages'),
   yearPublished: integer('year_published'),
   originalPublicationYear: integer('original_publication_year'),
+  coverImageUrl: text('cover_image_url'),
 
   synopsis: text('synopsis'),
   tags: text('tags').array(),

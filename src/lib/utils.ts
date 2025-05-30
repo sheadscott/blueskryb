@@ -35,3 +35,60 @@ export function extractIsbn13FromBookshopUrl(url: string): string | null {
 }
 
 export const isbn13Regex = /97(?:-?\d){11}/
+
+/**
+ * Fetch with retry logic and exponential backoff
+ * @param url - The URL to fetch
+ * @param maxRetries - Maximum number of retry attempts (default: 3)
+ * @returns Promise<Response> - The successful response
+ * @throws Error with descriptive message including the URL
+ */
+export async function retryFetch(
+  url: string,
+  maxRetries = 3
+): Promise<Response> {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await fetch(url)
+
+      if (response.ok) {
+        // console.log(`Fetch successful for: ${url}`)
+        return response
+      }
+
+      if (response.status === 404) {
+        throw new Error(`Resource not found (404): ${url}`)
+      }
+
+      if (attempt === maxRetries) {
+        throw new Error(
+          `Fetch failed after all retries (${response.status}): ${url}`
+        )
+      }
+
+      console.warn(
+        `Fetch failed (attempt ${attempt}/${maxRetries}, status ${response.status}): ${url}`
+      )
+
+      // Wait before retrying (exponential backoff)
+      await new Promise((resolve) =>
+        setTimeout(resolve, Math.pow(2, attempt - 1) * 1000)
+      )
+    } catch (error) {
+      if (attempt === maxRetries || (error as Error).message.includes('404')) {
+        throw error
+      }
+
+      console.warn(
+        `Fetch error (attempt ${attempt}/${maxRetries}): ${error} - ${url}`
+      )
+
+      // Wait before retrying (exponential backoff)
+      await new Promise((resolve) =>
+        setTimeout(resolve, Math.pow(2, attempt - 1) * 1000)
+      )
+    }
+  }
+
+  throw new Error(`Unexpected retry loop exit for: ${url}`)
+}

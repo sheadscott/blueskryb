@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { isbn13Regex } from '@/lib/utils'
+import { getBaseUrl, isbn13Regex, retryFetch } from '@/lib/utils'
 import { ImageResponse } from '@vercel/og'
 
 export const runtime = 'edge'
@@ -40,6 +40,8 @@ export async function GET(request: Request) {
     console.log('Roboto Regular loaded, size:', robotoRegularFont.byteLength)
   }
 
+  // https://www.goodreads.com/book/auto_complete?q=9780307951335&format=json
+
   const goodreadsApiUrl = `https://www.goodreads.com/book/auto_complete?q=${isbn}&format=json`
   const goodreadsResponse = await fetch(goodreadsApiUrl)
   const goodreadsData = await goodreadsResponse.json()
@@ -54,75 +56,56 @@ export async function GET(request: Request) {
   }
 
   const bookData = goodreadsData[0]
-  const { imageUrl, bookTitleBare, author } = bookData
+  const { imageUrl, title, bookTitleBare, bookId, author } = bookData
 
-  if (!imageUrl || !bookTitleBare || !author) {
+  if (!imageUrl || (!title && !bookTitleBare) || !author) {
     return new Response('Incomplete book data', { status: 404 })
   }
 
   const coverUrl = imageUrl.replace(/\._[A-Z][A-Z]\d+_/, '')
 
   // Pre-fetch the cover image with retry logic (except for 404s)
-  const maxRetries = 3
-  let coverResponse
+  try {
+    await retryFetch(coverUrl)
+  } catch (error) {
+    const errorMessage = (error as Error).message
+    console.error('Cover image fetch failed:', errorMessage)
 
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      coverResponse = await fetch(coverUrl)
-      if (coverResponse.ok) {
-        console.log('Cover image validated:', coverUrl)
-        break
-      }
-
-      if (coverResponse.status === 404) {
-        console.error('Cover image not found (404):', coverUrl)
-        return new Response('Cover image not found', { status: 404 })
-      }
-
-      console.warn(
-        `Cover image fetch failed (attempt ${attempt}/${maxRetries}):`,
-        coverResponse.status,
-        coverUrl
-      )
-
-      if (attempt === maxRetries) {
-        console.error(
-          'Cover image fetch failed after all retries:',
-          coverResponse.status,
-          coverUrl
-        )
-        return new Response('Cover image not accessible after retries', {
-          status: 404,
-        })
-      }
-
-      // Wait before retrying (exponential backoff)
-      await new Promise((resolve) =>
-        setTimeout(resolve, Math.pow(2, attempt - 1) * 1000)
-      )
-    } catch (error) {
-      console.warn(
-        `Cover image fetch error (attempt ${attempt}/${maxRetries}):`,
-        error,
-        coverUrl
-      )
-
-      if (attempt === maxRetries) {
-        console.error(
-          'Cover image fetch error after all retries:',
-          error,
-          coverUrl
-        )
-        return new Response('Cover image fetch error after retries', {
-          status: 404,
-        })
-      }
-
-      // Wait before retrying (exponential backoff)
-      await new Promise((resolve) =>
-        setTimeout(resolve, Math.pow(2, attempt - 1) * 1000)
-      )
+    if (errorMessage.includes('404')) {
+      return new Response('Cover image not found', { status: 404 })
     }
+
+    return new Response('Cover image not accessible after retries', {
+      status: 404,
+    })
+  }
+
+  // POST /api/books/create
+  // Create a book in the database (optional - don't fail if this errors)
+  try {
+    const env = process.env.VERCEL_TARGET_ENV || 'development'
+    await fetch(`${getBaseUrl(env)}/api/books/create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title: title || bookTitleBare,
+        author: author.name,
+        isbn13: isbn,
+        coverImageUrl: coverUrl,
+        grBookId: bookId,
+      }),
+    })
+
+    // const result = await response.json()
+    // console.log('Book creation result:', result)
+  } catch (error) {
+    console.error(
+      'Book creation failed (continuing with OG generation):',
+      error
+    )
+    // Continue with OG image generation even if book creation fails
   }
 
   return new ImageResponse(
@@ -170,7 +153,7 @@ export async function GET(request: Request) {
               fontFamily: 'Roboto Serif',
             }}
           >
-            {bookTitleBare}
+            {bookTitleBare || title}
           </h1>
           <p
             style={{
