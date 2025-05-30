@@ -145,6 +145,7 @@ export async function GET(request: Request) {
             height: 628 - 56,
             width: (628 - 56) * 0.667,
             margin: 28,
+            marginRight: 0,
             padding: 0,
             objectFit: 'cover',
             boxShadow: '0 4px 32px rgba(0,0,0,0.15)',
