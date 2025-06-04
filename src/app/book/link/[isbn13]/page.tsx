@@ -1,7 +1,8 @@
+import PostHogClient from '@/lib/posthog-client'
 import { getBaseUrl } from '@/lib/utils'
 import { decode } from 'html-entities'
 import type { Metadata } from 'next'
-import { headers } from 'next/headers'
+import { cookies, headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 type Props = {
@@ -114,6 +115,49 @@ export default async function Page({ params, searchParams }: Props) {
 
   // If it's not a bot and not in test mode, redirect to affiliate link
   if (!isBot && !isTest) {
+    // Access PostHog distinct ID from cookie
+    const cookiesStore = await cookies()
+
+    // PostHog cookie format: ph_<project_api_key>_posthog
+    const postHogCookieName = `ph_${process.env.NEXT_PUBLIC_POSTHOG_KEY}_posthog`
+    const postHogCookie = cookiesStore.get(postHogCookieName)
+
+    let distinctId = null
+    if (postHogCookie?.value) {
+      try {
+        const cookieData = JSON.parse(postHogCookie.value)
+        distinctId = cookieData.distinct_id
+        console.log('PostHog Distinct ID:', distinctId)
+      } catch (error) {
+        console.error('Error parsing PostHog cookie:', error)
+      }
+    } else {
+      console.log('PostHog cookie not found')
+    }
+
+    // You can now use distinctId for server-side analytics
+    // For example, server-side event capture would require posthog-node:
+    try {
+      const posthog = PostHogClient()
+      console.log('PostHog client created successfully')
+
+      const eventData = {
+        distinctId: distinctId || `${isbn13}-${Date.now()}`,
+        event: 'Bookshop Redirect',
+        properties: {
+          $current_url: `${getBaseUrl(process.env.VERCEL_TARGET_ENV as string)}/book/link/${isbn13}`,
+        },
+      }
+
+      console.log('Capturing server-side event:', eventData)
+      posthog.capture(eventData)
+      console.log('Server-side event captured, shutting down...')
+      await posthog.shutdown()
+      console.log('PostHog shutdown complete')
+    } catch (error) {
+      console.error('Error with server-side PostHog:', error)
+    }
+
     console.log('Redirecting to:', `https://bookshop.org/a/113619/${isbn13}`)
     redirect(`https://bookshop.org/a/113619/${isbn13}`)
   }
