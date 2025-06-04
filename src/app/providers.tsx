@@ -9,6 +9,7 @@ import posthog from 'posthog-js'
 import { PostHogProvider as PHProvider } from 'posthog-js/react'
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
+  console.log('ENV', process.env.NEXT_PUBLIC_VERCEL_ENV)
   const isProduction = process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
 
   useEffect(() => {
