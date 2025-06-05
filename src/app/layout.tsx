@@ -1,8 +1,12 @@
-import Header from '@/components/header/header'
 import getSession from '@/lib/iron'
 import type { Metadata } from 'next'
 import { League_Spartan, Libre_Baskerville } from 'next/font/google'
 // import localFont from 'next/font/local'
+import Footer from '@/components/footer/footer'
+import Header from '@/components/header/header'
+import { WebVitals } from '@/components/performance/web-vitals'
+import { CookieConsentWrapper } from '@/components/ui/cookie-consent-wrapper'
+import { Suspense } from 'react'
 import './globals.css'
 import { PostHogProvider } from './providers'
 
@@ -61,9 +65,14 @@ export default async function RootLayout({
         className={`${libreBaskerville.variable} ${leagueSpartan.variable} font-sans antialiased`}
       >
         <PostHogProvider>
-          <div className="container mx-auto px-4">
+          <WebVitals />
+          <Suspense fallback={null}>
+            <CookieConsentWrapper />
+          </Suspense>
+          <div className="container max-w-4xl mx-auto px-4 flex flex-col min-h-screen">
             <Header user={session.user} />
             <main className="max-w-xl mx-auto md:mt-8">{children}</main>
+            <Footer />
           </div>
         </PostHogProvider>
       </body>
