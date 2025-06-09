@@ -53,8 +53,6 @@ export function LinkGeneratorForm() {
       const baseUrl = getBaseUrl(
         process.env.NEXT_PUBLIC_VERCEL_ENV || 'development'
       )
-      const blueskrybLink = `${baseUrl}/book/link/${isbn13}`
-      setGeneratedLink(blueskrybLink)
 
       // Check if the OG image exists before setting URL
       const newOgImageApiUrl = `/api/og?isbn=${isbn13}`
@@ -73,6 +71,9 @@ export function LinkGeneratorForm() {
         setImageLoading(false)
         return
       }
+
+      const blueskrybLink = `${baseUrl}/book/link/${isbn13}`
+      setGeneratedLink(blueskrybLink)
 
       // Only load image if it's different (lazy)
       if (ogImageUrl !== newOgImageApiUrl) {
