@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { getBaseUrl, isbn13Regex, retryFetch } from '@/lib/utils'
+import { isbn13Regex, retryFetch } from '@/lib/utils'
 import { ImageResponse } from '@vercel/og'
 
 export const runtime = 'edge'
@@ -62,11 +62,22 @@ export async function GET(request: Request) {
     return new Response('Incomplete book data', { status: 404 })
   }
 
-  const coverUrl = imageUrl.replace(/\._[A-Z][A-Z]\d+_/, '')
+  // const imageRegex = /\._.*_/
+  // const coverUrl = imageUrl.replace(imageRegex, '')
+  const coverUrl =
+    'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1503141060i/33155325._SX75_.jpg'
 
+  console.log('coverUrl', coverUrl)
+
+  // fetch the cover image for testing
+  const coverImageResponse = await fetch(coverUrl)
+  console.log('coverImageResponse', coverImageResponse.status)
   // Pre-fetch the cover image with retry logic (except for 404s)
+
   try {
     await retryFetch(coverUrl)
+    // const response = await retryFetch(coverUrl)
+    // console.log('RESPONSE', response)
   } catch (error) {
     const errorMessage = (error as Error).message
     console.error('Cover image fetch failed:', errorMessage)
@@ -82,31 +93,31 @@ export async function GET(request: Request) {
 
   // POST /api/books/create
   // Create a book in the database (optional - don't fail if this errors)
-  try {
-    const env = process.env.VERCEL_TARGET_ENV || 'development'
-    await fetch(`${getBaseUrl(env)}/api/books/create`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        title: title || bookTitleBare,
-        author: author.name,
-        isbn13: isbn,
-        coverImageUrl: coverUrl,
-        grBookId: bookId,
-      }),
-    })
+  // try {
+  //   const env = process.env.VERCEL_TARGET_ENV || 'development'
+  //   await fetch(`${getBaseUrl(env)}/api/books/create`, {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({
+  //       title: title || bookTitleBare,
+  //       author: author.name,
+  //       isbn13: isbn,
+  //       coverImageUrl: coverUrl,
+  //       grBookId: bookId,
+  //     }),
+  //   })
 
-    // const result = await response.json()
-    // console.log('Book creation result:', result)
-  } catch (error) {
-    console.error(
-      'Book creation failed (continuing with OG generation):',
-      error
-    )
-    // Continue with OG image generation even if book creation fails
-  }
+  //   // const result = await response.json()
+  //   // console.log('Book creation result:', result)
+  // } catch (error) {
+  //   console.error(
+  //     'Book creation failed (continuing with OG generation):',
+  //     error
+  //   )
+  //   // Continue with OG image generation even if book creation fails
+  // }
 
   return new ImageResponse(
     (

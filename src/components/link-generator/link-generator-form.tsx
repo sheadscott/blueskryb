@@ -56,8 +56,25 @@ export function LinkGeneratorForm() {
       const blueskrybLink = `${baseUrl}/book/link/${isbn13}`
       setGeneratedLink(blueskrybLink)
 
-      // Only load image if it's different (lazy)
+      // Check if the OG image exists before setting URL
       const newOgImageApiUrl = `/api/og?isbn=${isbn13}`
+
+      // Test if the API endpoint exists
+      try {
+        const response = await fetch(newOgImageApiUrl, { method: 'HEAD' })
+        if (!response.ok) {
+          setError(`No book cover image found for ISBN: ${isbn13}`)
+          setImageLoading(false)
+          return
+        }
+      } catch (fetchError) {
+        console.error('Failed to check for book cover image:', fetchError)
+        setError('Failed to check for book cover image')
+        setImageLoading(false)
+        return
+      }
+
+      // Only load image if it's different (lazy)
       if (ogImageUrl !== newOgImageApiUrl) {
         setOgImageUrl(newOgImageApiUrl)
         setShowImage(true)
