@@ -62,16 +62,16 @@ export async function GET(request: Request) {
     return new Response('Incomplete book data', { status: 404 })
   }
 
-  // const imageRegex = /\._.*_/
-  // const coverUrl = imageUrl.replace(imageRegex, '')
-  const coverUrl =
-    'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1503141060i/33155325._SX75_.jpg'
+  const imageRegex = /\._.*_/
+  const coverUrl = imageUrl.replace(imageRegex, '')
+  // const coverUrl =
+  //   'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1503141060i/33155325._SX75_.jpg'
 
-  console.log('coverUrl', coverUrl)
+  // console.log('coverUrl', coverUrl)
 
   // fetch the cover image for testing
-  const coverImageResponse = await fetch(coverUrl)
-  console.log('coverImageResponse', coverImageResponse.status)
+  // const coverImageResponse = await fetch(coverUrl)
+  // console.log('coverImageResponse', coverImageResponse.status)
   // Pre-fetch the cover image with retry logic (except for 404s)
 
   try {
