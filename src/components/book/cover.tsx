@@ -10,7 +10,7 @@ export interface BookCoverProps {
 }
 
 export default function BookCover(props: BookCoverProps) {
-  const { isbn, title, author, className, width = 96, height = 144 } = props
+  const { title, author, className, width = 96, height = 144 } = props
   const src = 'default-cover.svg'
   // isbn
   // ? `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`
