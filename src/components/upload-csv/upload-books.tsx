@@ -71,7 +71,7 @@ export default function UploadBooks({ userId }: { userId: number }) {
   }
 
   return (
-    <Card>
+    <Card className="max-w-xl mx-auto">
       <CardHeader>
         <CardTitle>Upload a File</CardTitle>
         <CardDescription>

@@ -11,7 +11,7 @@ import { PostHogProvider as PHProvider } from 'posthog-js/react'
 interface CookiePreferences {
   necessary: boolean
   analytics: boolean
-  marketing: boolean
+  // marketing: boolean
 }
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {

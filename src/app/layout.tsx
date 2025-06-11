@@ -71,7 +71,7 @@ export default async function RootLayout({
           </Suspense>
           <div className="container max-w-4xl mx-auto px-4 flex flex-col min-h-screen">
             <Header user={session.user} />
-            <main className="max-w-xl mx-auto md:mt-8">{children}</main>
+            <main className="md:mt-8">{children}</main>
             <Footer />
           </div>
         </PostHogProvider>

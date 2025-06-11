@@ -11,9 +11,10 @@ export interface BookCoverProps {
 
 export default function BookCover(props: BookCoverProps) {
   const { isbn, title, author, className, width = 96, height = 144 } = props
-  const src = isbn
-    ? `https://images-us.bookshop.org/ingram/${isbn}.jpg`
-    : '/default-cover.svg'
+  const src = 'default-cover.svg'
+  // isbn
+  // ? `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`
+  // : '/default-cover.svg'
 
   let alt = 'Book cover'
   if (title && author) alt = `Cover of ${title} by ${author}`

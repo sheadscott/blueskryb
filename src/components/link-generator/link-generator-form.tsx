@@ -100,6 +100,8 @@ export function LinkGeneratorForm() {
     }
   }
 
+  const placeholderText = 'https://bookshop.org...'
+
   return (
     <>
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -108,9 +110,11 @@ export function LinkGeneratorForm() {
           <Input
             id="bookshop-url"
             type="url"
-            placeholder="https://bookshop.org/p/books/the-great-gatsby/18533627?ean=9780743273565..."
+            placeholder={placeholderText}
             value={bookshopUrl}
             onChange={(e) => setBookshopUrl(e.target.value)}
+            onFocus={(e) => (e.target.placeholder = '')}
+            onBlur={(e) => (e.target.placeholder = placeholderText)}
             className="w-full"
           />
           <p className="text-sm text-muted-foreground">
