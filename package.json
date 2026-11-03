@@ -47,7 +47,7 @@
     "iron-session": "^8.0.3",
     "lucide-react": "^0.508.0",
     "multiformats": "^13.3.6",
-    "next": "15.3.2",
+    "next": "15.5.28",
     "papaparse": "^5.5.2",
     "pg": "^8.16.0",
     "posthog-js": "^1.249.3",
